@@ -18,23 +18,17 @@
 }
 body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .app { max-width:480px; margin:0 auto; min-height:100vh; }
-
-.header {
-  background:linear-gradient(135deg,#1f7a4c,#2e9e64 50%,#3db878);
-  padding:1rem 1.25rem 1.5rem; color:#fff; position:relative; overflow:hidden;
-}
+.header { background:linear-gradient(135deg,#1f7a4c,#2e9e64 50%,#3db878); padding:1rem 1.25rem 1.5rem; color:#fff; position:relative; overflow:hidden; }
 .header::before { content:''; position:absolute; top:-30px; right:-30px; width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.08); }
 .header-top { display:flex; align-items:center; gap:10px; }
 .logo-circle { width:42px; height:42px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
 .header h1 { font-size:17px; font-weight:700; line-height:1.2; }
 .header p { font-size:12px; opacity:.85; }
 .school-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(255,255,255,0.2); border-radius:20px; padding:4px 10px; margin-top:6px; font-size:12px; }
-
 .nav-tabs { display:flex; background:#fff; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
 .nav-tab { flex:1; padding:12px 8px; border:none; background:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; font-family:'Kanit',sans-serif; font-size:11px; color:#888; transition:all .2s; }
 .nav-tab.active { color:var(--g600); border-bottom:2.5px solid var(--g500); }
 .nav-tab i { font-size:22px; }
-
 .page { display:none; padding:1rem; }
 .page.active { display:block; }
 
@@ -56,7 +50,6 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .card { background:var(--card); border-radius:16px; padding:16px; border:1px solid var(--border); margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
 .section-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:6px; }
 .section-title i { font-size:20px; color:var(--g500); }
-
 .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
 .stat-card { border-radius:16px; padding:14px 12px; display:flex; flex-direction:column; gap:4px; position:relative; overflow:hidden; }
 .stat-card::after { content:attr(data-icon); position:absolute; bottom:-4px; right:4px; font-size:36px; opacity:.15; }
@@ -67,23 +60,28 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .stat-label { font-size:11px; color:var(--muted); font-weight:600; }
 .stat-value { font-size:22px; font-weight:800; color:var(--text); line-height:1; }
 .stat-unit { font-size:11px; color:var(--muted); }
-
 .waste-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
 .waste-btn { border-radius:14px; border:2px solid transparent; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; transition:all .2s; background:var(--bg); font-family:'Kanit',sans-serif; }
 .waste-btn.selected { border-color:var(--g500); background:var(--g50); }
 .waste-btn .icon { font-size:28px; }
 .waste-btn .name { font-size:10px; font-weight:600; color:var(--text); text-align:center; }
 .waste-btn .factor { font-size:9px; color:var(--muted); }
-
 label { display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:4px; }
-input[type=number], input[type=text] { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:15px; font-family:'Kanit',sans-serif; background:var(--bg); color:var(--text); outline:none; transition:border .2s; }
+input[type=number], input[type=text], input[type=date] {
+  width:100%; padding:10px 12px; border:1.5px solid var(--border);
+  border-radius:10px; font-size:15px; font-family:'Kanit',sans-serif;
+  background:var(--bg); color:var(--text); outline:none; transition:border .2s;
+}
+input[type=date] { cursor:pointer; }
 input:focus { border-color:var(--g500); }
-
+select { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:'Kanit',sans-serif; background:var(--bg); color:var(--text); outline:none; cursor:pointer; }
+select:focus { border-color:var(--g500); }
 .btn-primary { width:100%; padding:14px; border:none; border-radius:14px; background:linear-gradient(135deg,var(--g500),var(--g600)); color:#fff; font-size:16px; font-weight:700; font-family:'Kanit',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .15s; box-shadow:0 4px 12px rgba(46,158,100,0.35); }
 .btn-primary:active { transform:scale(0.98); }
 .btn-primary i { font-size:20px; }
 .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
 
+/* RESULT BOX */
 .result-box { border-radius:14px; background:var(--g50); border:1.5px solid var(--g100); padding:14px; margin-top:12px; display:none; }
 .result-box.show { display:block; }
 .result-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; }
@@ -96,54 +94,77 @@ input:focus { border-color:var(--g500); }
 .tree-equiv .text { font-size:12px; color:var(--muted); }
 .tree-equiv .val { font-weight:700; color:var(--text); }
 
-.log-item { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid var(--border); }
+/* PHOTO UPLOAD */
+.photo-upload-area {
+  border:2px dashed var(--g200); border-radius:12px; padding:16px;
+  text-align:center; cursor:pointer; transition:all .2s; background:var(--bg);
+  position:relative;
+}
+.photo-upload-area:hover { border-color:var(--g500); background:var(--g50); }
+.photo-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.photo-upload-area .upload-icon { font-size:32px; color:var(--g500); margin-bottom:6px; }
+.photo-upload-area p { font-size:13px; color:var(--muted); }
+.photo-upload-area .optional-badge { display:inline-block; background:var(--a100); color:#92400e; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600; margin-top:4px; }
+.photo-preview { margin-top:10px; position:relative; display:none; }
+.photo-preview img { width:100%; border-radius:10px; max-height:200px; object-fit:cover; }
+.photo-preview .remove-btn { position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; }
+
+/* LOG ITEMS */
+.log-item { display:flex; align-items:flex-start; gap:10px; padding:12px 0; border-bottom:1px solid var(--border); }
 .log-item:last-child { border-bottom:none; }
 .log-icon { width:40px; height:40px; border-radius:12px; background:var(--g50); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-.log-info { flex:1; }
+.log-info { flex:1; min-width:0; }
 .log-name { font-size:14px; font-weight:600; color:var(--text); }
 .log-meta { font-size:11px; color:var(--muted); }
-.log-co2 { font-size:13px; font-weight:700; color:var(--g600); white-space:nowrap; text-align:right; }
+.log-co2 { font-size:13px; font-weight:700; color:var(--g600); white-space:nowrap; text-align:right; flex-shrink:0; }
+.log-photo { margin-top:6px; }
+.log-photo img { width:100%; max-height:140px; object-fit:cover; border-radius:8px; cursor:pointer; }
 
+/* MISC */
 .empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
 .empty-state .empty-icon { font-size:52px; margin-bottom:12px; }
 .empty-state p { font-size:14px; line-height:1.6; }
-
 .month-bar-wrap { display:flex; gap:4px; align-items:flex-end; height:140px; padding-bottom:4px; }
 .month-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
 .month-bar { width:100%; border-radius:6px 6px 0 0; background:var(--g200); transition:height .4s; min-height:4px; }
 .month-bar.active { background:var(--g500); }
 .month-label { font-size:9px; color:var(--muted); }
-
+.filter-row { display:flex; gap:8px; margin-bottom:12px; }
+.filter-row select { flex:1; }
+.dl-btn { background:linear-gradient(135deg,var(--g500),var(--g600)); color:#fff; border:none; border-radius:12px; padding:11px 16px; font-family:'Kanit',sans-serif; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(46,158,100,0.3); transition:transform .15s; }
+.dl-btn:active { transform:scale(0.97); }
+.dl-btn i { font-size:17px; }
+.dl-btn-outline { background:var(--g50); border:1.5px solid var(--g200); border-radius:12px; padding:10px 16px; font-family:'Kanit',sans-serif; font-size:13px; color:var(--g600); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; }
+.dl-btn-outline i { font-size:17px; }
 .info-chip { background:var(--s100); border-radius:10px; padding:10px 12px; display:flex; gap:8px; align-items:flex-start; margin-bottom:10px; }
 .info-chip i { font-size:18px; color:var(--s500); flex-shrink:0; margin-top:1px; }
 .info-chip p { font-size:12px; color:#0369a1; line-height:1.5; }
-
 .factor-table { width:100%; border-collapse:collapse; }
 .factor-table th { font-size:11px; color:var(--muted); text-align:left; padding:4px 6px; border-bottom:1px solid var(--border); }
 .factor-table td { font-size:13px; padding:6px; border-bottom:1px solid rgba(0,0,0,0.04); }
 .factor-table tr:last-child td { border-bottom:none; }
-
-.export-btn { background:var(--g50); border:1.5px solid var(--g200); border-radius:10px; padding:10px 20px; font-family:'Kanit',sans-serif; font-size:13px; color:var(--g600); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; }
 .sync-status { font-size:11px; color:var(--muted); text-align:center; margin-top:8px; }
 .sync-status.syncing { color:var(--g500); }
 .sync-status.error { color:#dc2626; }
 .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#1f7a4c; color:#fff; padding:10px 20px; border-radius:20px; font-size:14px; font-family:'Kanit',sans-serif; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
 .toast.show { opacity:1; }
-
+.summary-box { background:var(--g50); border:1px solid var(--g100); border-radius:12px; padding:12px 14px; margin-bottom:12px; font-size:13px; color:var(--g700); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.summary-box b { font-size:16px; color:var(--g600); }
+/* LIGHTBOX */
+.lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
+.lightbox.open { display:flex; }
+.lightbox img { max-width:100%; max-height:90vh; border-radius:12px; }
+.lightbox-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.2); color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 @media (min-width:640px) { .waste-grid { grid-template-columns:repeat(4,1fr); } }
 </style>
 </head>
 <body>
 
 <script>
-// ══════════════════════════════════════════
-// ⚙️  แก้ไขตรงนี้เท่านั้น
-// ══════════════════════════════════════════
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzG3CCU-Vw8N-OpDBuyznvkm9E_VjANZvPkLznzEO2AWQMQzx7w3WYukYufGq_0Q13f/exec";
 const APP_NAME = "GHG School Tracker";
 const APP_SUBTITLE = "บันทึกขยะ คำนวณก๊าซเรือนกระจก";
 const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัสโรงเรียน";
-// ══════════════════════════════════════════
 </script>
 
 <!-- LOGIN -->
@@ -151,8 +172,8 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
   <div class="login-card">
     <div class="login-logo">
       <span class="emoji">🌿</span>
-      <h1 id="appTitle">GHG School Tracker</h1>
-      <p id="appSubtitle">บันทึกขยะ คำนวณก๊าซเรือนกระจก</p>
+      <h1>GHG School Tracker</h1>
+      <p>บันทึกขยะ คำนวณก๊าซเรือนกระจก</p>
     </div>
     <div style="margin-bottom:16px;">
       <span class="login-label">รหัสโรงเรียน (School Code)</span>
@@ -164,7 +185,7 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
     <button class="btn-primary" onclick="doLogin()" id="loginBtn">
       <i class="ti ti-login"></i>เข้าสู่ระบบ
     </button>
-    <div class="login-divider" id="contactLine">ติดต่อ LAB เพื่อขอรหัสโรงเรียน</div>
+    <div class="login-divider">ติดต่อ LAB เพื่อขอรหัสโรงเรียน</div>
   </div>
 </div>
 
@@ -174,8 +195,8 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
     <div class="header-top">
       <div class="logo-circle">🌿</div>
       <div>
-        <h1 id="headerTitle">GHG School Tracker</h1>
-        <p id="headerSubtitle">บันทึกขยะ คำนวณก๊าซเรือนกระจก</p>
+        <h1>GHG School Tracker</h1>
+        <p>บันทึกขยะ คำนวณก๊าซเรือนกระจก</p>
       </div>
     </div>
     <div class="school-badge">
@@ -201,6 +222,27 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
 
   <!-- DASHBOARD -->
   <div id="page-dashboard" class="page active">
+    <div class="card" style="padding:12px 16px;">
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <i class="ti ti-filter" style="font-size:18px;color:var(--g500);"></i>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);">กรองข้อมูล</span>
+        <select id="filterYear" onchange="applyFilter()" style="flex:1;min-width:90px;">
+          <option value="all">ทุกปี</option>
+        </select>
+        <select id="filterMonth" onchange="applyFilter()" style="flex:1;min-width:90px;">
+          <option value="all">ทุกเดือน</option>
+          <option value="1">ม.ค.</option><option value="2">ก.พ.</option>
+          <option value="3">มี.ค.</option><option value="4">เม.ย.</option>
+          <option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
+          <option value="7">ก.ค.</option><option value="8">ส.ค.</option>
+          <option value="9">ก.ย.</option><option value="10">ต.ค.</option>
+          <option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
+        </select>
+        <button onclick="exportFiltered()" class="dl-btn" style="padding:9px 12px;">
+          <i class="ti ti-download"></i>ดาวน์โหลด
+        </button>
+      </div>
+    </div>
     <div class="stat-grid">
       <div class="stat-card green" data-icon="♻️">
         <span class="stat-label">CO₂e รวม (Kg)</span>
@@ -245,13 +287,25 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
         <label>น้ำหนัก (กิโลกรัม)</label>
         <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1">
       </div>
-      <div style="margin-bottom:12px;">
-        <label>ห้องเรียน / ชั้นปี</label>
-        <input type="text" id="classInput" placeholder="เช่น ม.1/1">
-      </div>
       <div style="margin-bottom:14px;">
         <label>วันที่บันทึก</label>
-        <input type="text" id="dateInput" readonly style="background:var(--bg);">
+        <input type="date" id="dateInput">
+      </div>
+      <!-- รูปถ่าย optional -->
+      <div style="margin-bottom:14px;">
+        <label style="display:flex;align-items:center;gap:6px;">
+          <i class="ti ti-camera" style="font-size:16px;color:var(--g500);"></i>
+          รูปถ่าย <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span>
+        </label>
+        <div class="photo-upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+          <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhoto(event)" style="display:none;">
+          <div class="upload-icon">📷</div>
+          <p>กดเพื่อถ่ายภาพหรือเลือกรูป</p>
+        </div>
+        <div class="photo-preview" id="photoPreview">
+          <img id="photoImg" src="" alt="preview">
+          <button class="remove-btn" onclick="removePhoto()">✕</button>
+        </div>
       </div>
       <div class="result-box" id="calcResult">
         <div class="result-row">
@@ -282,17 +336,37 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
 
   <!-- HISTORY -->
   <div id="page-history" class="page">
-    <div class="card">
-      <div class="section-title"><i class="ti ti-clock-history"></i>ประวัติการบันทึกทั้งหมด</div>
-      <div id="historyList"></div>
+    <div class="card" style="padding:12px 16px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">
+        <i class="ti ti-filter" style="font-size:16px;color:var(--g500);vertical-align:-2px;"></i> กรองประวัติ
+      </div>
+      <div class="filter-row">
+        <select id="histYear" onchange="renderHistory()">
+          <option value="all">ทุกปี</option>
+        </select>
+        <select id="histMonth" onchange="renderHistory()">
+          <option value="all">ทุกเดือน</option>
+          <option value="1">ม.ค.</option><option value="2">ก.พ.</option>
+          <option value="3">มี.ค.</option><option value="4">เม.ย.</option>
+          <option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
+          <option value="7">ก.ค.</option><option value="8">ส.ค.</option>
+          <option value="9">ก.ย.</option><option value="10">ต.ค.</option>
+          <option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="exportFiltered('hist')" class="dl-btn" style="flex:1;">
+          <i class="ti ti-file-spreadsheet"></i>ดาวน์โหลด CSV
+        </button>
+        <button onclick="loadFromServer()" class="dl-btn-outline" style="flex:1;">
+          <i class="ti ti-refresh"></i>โหลดใหม่
+        </button>
+      </div>
     </div>
-    <div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-      <button class="export-btn" onclick="exportCSV()">
-        <i class="ti ti-file-spreadsheet" style="font-size:18px;"></i>ดาวน์โหลด CSV
-      </button>
-      <button class="export-btn" onclick="loadFromServer()" style="background:var(--s100);border-color:#bae6fd;color:#0369a1;">
-        <i class="ti ti-refresh" style="font-size:18px;"></i>โหลดจาก Cloud
-      </button>
+    <div class="card">
+      <div class="section-title"><i class="ti ti-clock-history"></i>รายการทั้งหมด</div>
+      <div id="histSummary"></div>
+      <div id="historyList"></div>
     </div>
   </div>
 
@@ -300,7 +374,7 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
   <div id="page-info" class="page">
     <div class="info-chip">
       <i class="ti ti-bulb"></i>
-      <p>ค่า Emission Factor อ้างอิงจาก <b>องค์การบริหารจัดการก๊าซเรือนกระจก (อบก.)</b> ประเทศไทย — คำนวณปริมาณ CO₂ ที่หลีกเลี่ยงได้จากการรีไซเคิลวัสดุแต่ละประเภท</b></p>
+      <p>ค่า Emission Factor อ้างอิงจาก <b>องค์การบริหารจัดการก๊าซเรือนกระจก (อบก.)</b> ประเทศไทย</p>
     </div>
     <div class="card">
       <div class="section-title"><i class="ti ti-math"></i>สูตรคำนวณ (อบก.)</div>
@@ -327,6 +401,12 @@ const CONTACT_LINE = "ติดต่อ LAB เพื่อขอรหัส�
   </div>
 </div>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -339,31 +419,28 @@ const WASTE_TYPES = [
   {id:'ewaste',   name:'อิเล็กทรอนิกส์', icon:'📱', factor:2.4000},
 ];
 
-let records = [], selectedWaste = null, currentSchool = null;
+let records = [], selectedWaste = null, currentSchool = null, photoBase64 = null;
 
 window.onload = function() {
-  document.getElementById('appTitle').textContent = APP_NAME;
-  document.getElementById('appSubtitle').textContent = APP_SUBTITLE;
-  document.getElementById('headerTitle').textContent = APP_NAME;
-  document.getElementById('headerSubtitle').textContent = APP_SUBTITLE;
-  document.getElementById('contactLine').textContent = CONTACT_LINE;
-
   const saved = localStorage.getItem('ghg_school');
   if (saved) { currentSchool = JSON.parse(saved); startApp(); }
-
   buildWasteGrid();
   buildFactorTable();
-  document.getElementById('dateInput').value =
-    new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  // set today as default date
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  document.getElementById('dateInput').value = yyyy+'-'+mm+'-'+dd;
   document.getElementById('weightInput').addEventListener('input', updateCalc);
 };
 
+// ── LOGIN ──
 async function doLogin() {
   const code = document.getElementById('schoolCodeInput').value.trim().toUpperCase();
   if (!code) return;
   const btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2"></i> กำลังตรวจสอบ...';
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> กำลังตรวจสอบ...';
   try {
     const res = await gasGet({action:'validateSchool', school_code:code});
     if (res.success) {
@@ -376,11 +453,10 @@ async function doLogin() {
       document.getElementById('loginError').classList.add('show');
     }
   } catch(e) {
-    document.getElementById('loginError').textContent = 'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่';
+    document.getElementById('loginError').textContent = 'ไม่สามารถเชื่อมต่อได้';
     document.getElementById('loginError').classList.add('show');
   }
-  btn.disabled = false;
-  btn.innerHTML = '<i class="ti ti-login"></i>เข้าสู่ระบบ';
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-login"></i>เข้าสู่ระบบ';
 }
 
 function startApp() {
@@ -398,48 +474,207 @@ function doLogout() {
   location.reload();
 }
 
+// ── LOAD ──
 async function loadFromServer() {
   setSyncStatus('กำลังโหลดข้อมูล...', 'syncing');
   try {
     const res = await gasGet({action:'getRecords', school_code: currentSchool.code});
     if (res.success) {
       records = res.records || [];
-      renderDashboard(); renderHistory();
+      buildYearOptions();
+      applyFilter();
+      renderHistory();
       setSyncStatus('อัปเดตล่าสุด: ' + new Date().toLocaleTimeString('th-TH'));
     } else { setSyncStatus('โหลดไม่สำเร็จ', 'error'); }
   } catch(e) { setSyncStatus('ไม่สามารถเชื่อมต่อได้', 'error'); }
 }
 
+// ── PHOTO ──
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  // ย่อรูปก่อนบันทึก (max 800px, quality 0.7)
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      document.getElementById('photoImg').src = photoBase64;
+      document.getElementById('photoPreview').style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  photoBase64 = null;
+  document.getElementById('photoInput').value = '';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('photoImg').src = '';
+}
+
+// ── SAVE ──
 async function saveRecord() {
   if (!selectedWaste) { showToast('⚠️ กรุณาเลือกประเภทขยะ'); return; }
   const w = parseFloat(document.getElementById('weightInput').value);
   if (!w || w <= 0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
-  const cls = document.getElementById('classInput').value || 'ไม่ระบุ';
+  const dateVal = document.getElementById('dateInput').value;
+  if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
   const co2 = w * selectedWaste.factor;
+  const d = new Date(dateVal);
+  const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+
   const btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2"></i> กำลังบันทึก...';
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> กำลังบันทึก...';
   try {
-    const res = await gasPost({
+    const payload = {
       action:'saveRecord', school_code:currentSchool.code,
       waste_type:selectedWaste.id, waste_name:selectedWaste.name,
-      weight_kg:w, co2e_kg:co2, trees_equiv:co2/9.5, class_room:cls
-    });
+      weight_kg:w, co2e_kg:co2, trees_equiv:co2/9.5,
+      date_selected: dateVal,
+      date_th_override: dateTh,
+      photo: photoBase64 || ''
+    };
+    const res = await gasPost(payload);
     if (res.success) {
       showToast('✅ บันทึกสำเร็จ!');
       document.getElementById('weightInput').value = '';
-      document.getElementById('classInput').value = '';
       document.getElementById('calcResult').classList.remove('show');
       document.querySelectorAll('.waste-btn').forEach(b => b.classList.remove('selected'));
       selectedWaste = null;
+      removePhoto();
       await loadFromServer();
       showPage('dashboard', document.querySelectorAll('.nav-tab')[0]);
     } else { showToast('❌ ' + (res.error||'บันทึกไม่สำเร็จ')); }
   } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
-  btn.disabled = false;
-  btn.innerHTML = '<i class="ti ti-device-floppy"></i>บันทึกข้อมูล';
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-device-floppy"></i>บันทึกข้อมูล';
 }
 
+// ── FILTER ──
+function buildYearOptions() {
+  const years = [...new Set(records.map(r => new Date(r.timestamp||r.date_th).getFullYear()))].sort((a,b)=>b-a);
+  ['filterYear','histYear'].forEach(id => {
+    const sel = document.getElementById(id), cur = sel.value;
+    sel.innerHTML = '<option value="all">ทุกปี</option>';
+    years.forEach(y => { sel.innerHTML += '<option value="'+y+'">'+y+'</option>'; });
+    sel.value = cur;
+  });
+}
+
+function getFilteredRecords(yearId, monthId) {
+  const year = document.getElementById(yearId).value;
+  const month = document.getElementById(monthId).value;
+  return records.filter(r => {
+    const d = new Date(r.timestamp||r.date_th);
+    if (year !== 'all' && d.getFullYear() !== parseInt(year)) return false;
+    if (month !== 'all' && (d.getMonth()+1) !== parseInt(month)) return false;
+    return true;
+  });
+}
+
+function applyFilter() { renderDashboard(getFilteredRecords('filterYear','filterMonth')); }
+
+// ── DASHBOARD ──
+function renderDashboard(filtered) {
+  if (!filtered) filtered = records;
+  const totalCO2 = filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
+  const totalW   = filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
+  document.getElementById('statCO2').textContent    = totalCO2.toFixed(2);
+  document.getElementById('statTree').textContent   = (totalCO2/9.5).toFixed(1);
+  document.getElementById('statWeight').textContent = totalW.toFixed(2);
+  document.getElementById('statCount').textContent  = filtered.length;
+
+  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  const now = new Date(), monthData = Array(6).fill(0), monthLabels = [];
+  for (let i=5; i>=0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    monthLabels.push(months[d.getMonth()]);
+    filtered.forEach(r => {
+      const rd = new Date(r.timestamp||r.date_th);
+      if (rd.getMonth()===d.getMonth() && rd.getFullYear()===d.getFullYear()) monthData[5-i]+=r.co2e_kg||0;
+    });
+  }
+  const maxVal = Math.max(...monthData, 0.1);
+  document.getElementById('monthChart').innerHTML = monthLabels.map((m,i) => {
+    const h = Math.round((monthData[i]/maxVal)*120);
+    return '<div class="month-bar-col"><div class="month-bar'+(i===5?' active':'')+'\" style="height:'+h+'px"></div><span class="month-label">'+m+'</span></div>';
+  }).join('');
+
+  const recent = document.getElementById('recentLog');
+  if (!filtered.length) {
+    recent.innerHTML = '<div class="empty-state"><div class="empty-icon">🌱</div><p>ไม่มีข้อมูลในช่วงที่เลือก</p></div>';
+  } else {
+    recent.innerHTML = filtered.slice(0,4).map(r => buildLogItem(r)).join('');
+  }
+}
+
+// ── HISTORY ──
+function renderHistory() {
+  const filtered = getFilteredRecords('histYear','histMonth');
+  const list = document.getElementById('historyList');
+  const summary = document.getElementById('histSummary');
+  if (!filtered.length) {
+    summary.innerHTML = '';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>ไม่มีข้อมูลในช่วงที่เลือก</p></div>';
+    return;
+  }
+  const totalCO2 = filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
+  const totalW   = filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
+  summary.innerHTML = '<div class="summary-box"><span>รวม <b>'+filtered.length+'</b> รายการ</span><span>น้ำหนัก <b>'+totalW.toFixed(2)+' kg</b></span><span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span></div>';
+  list.innerHTML = filtered.map(r => buildLogItem(r, true)).join('');
+}
+
+function buildLogItem(r, showPhoto) {
+  const w = WASTE_TYPES.find(t=>t.id===r.waste_type);
+  const icon = w ? w.icon : '♻️';
+  const photoHtml = showPhoto && r.photo
+    ? '<div class="log-photo"><img src="'+r.photo+'" alt="รูปถ่าย" onclick="openLightbox(\''+r.photo.replace(/'/g,"\\'")+'\')" loading="lazy"></div>'
+    : (r.photo ? '<div style="font-size:11px;color:var(--g500);margin-top:4px;">📷 มีรูปถ่าย</div>' : '');
+  return '<div class="log-item"><div class="log-icon">'+icon+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+'</div><div class="log-meta">'+r.date_th+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg</div>'+photoHtml+'</div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
+}
+
+// ── LIGHTBOX ──
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+// ── EXPORT ──
+function exportFiltered(src) {
+  const yearId  = src==='hist' ? 'histYear'  : 'filterYear';
+  const monthId = src==='hist' ? 'histMonth' : 'filterMonth';
+  const filtered = getFilteredRecords(yearId, monthId);
+  if (!filtered.length) { showToast('ไม่มีข้อมูลในช่วงที่เลือก'); return; }
+  const year  = document.getElementById(yearId).value;
+  const month = document.getElementById(monthId).value;
+  const suffix = (year!=='all'?'_'+year:'') + (month!=='all'?'_เดือน'+month:'');
+  let csv = 'วันที่,ประเภทขยะ,น้ำหนัก (kg),CO2e (kg),ต้นไม้ (ต้น),มีรูปถ่าย\n';
+  filtered.forEach(r => {
+    csv += r.date_th+','+(r.waste_name||'')+','+
+           parseFloat(r.weight_kg).toFixed(3)+','+
+           parseFloat(r.co2e_kg).toFixed(3)+','+
+           parseFloat(r.trees_equiv||0).toFixed(3)+','+
+           (r.photo ? 'มี' : '-')+'\n';
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'GHG_'+currentSchool.code+suffix+'_Report.csv';
+  a.click();
+  showToast('✅ ดาวน์โหลด '+filtered.length+' รายการ');
+}
+
+// ── GAS API ──
 function gasGet(params) {
   return new Promise((resolve, reject) => {
     const cbName = 'cb_' + Date.now();
@@ -452,12 +687,12 @@ function gasGet(params) {
     script.src = url; document.head.appendChild(script);
   });
 }
-
 async function gasPost(data) {
   const res = await fetch(GAS_URL, { method:'POST', body:JSON.stringify(data) });
   return res.json();
 }
 
+// ── UI BUILDERS ──
 function buildWasteGrid() {
   const grid = document.getElementById('wasteGrid');
   WASTE_TYPES.forEach(w => {
@@ -468,21 +703,18 @@ function buildWasteGrid() {
     grid.appendChild(btn);
   });
 }
-
 function buildFactorTable() {
   const tbody = document.getElementById('factorTableBody');
   WASTE_TYPES.forEach(w => {
     tbody.innerHTML += '<tr><td>'+w.icon+' '+w.name+'</td><td><b>'+w.factor+'</b></td><td>อบก. TGO</td></tr>';
   });
 }
-
 function selectWaste(id) {
   selectedWaste = WASTE_TYPES.find(w => w.id === id);
   document.querySelectorAll('.waste-btn').forEach(b => b.classList.remove('selected'));
   document.getElementById('wb_' + id).classList.add('selected');
   updateCalc();
 }
-
 function updateCalc() {
   if (!selectedWaste) return;
   const w = parseFloat(document.getElementById('weightInput').value);
@@ -495,63 +727,6 @@ function updateCalc() {
   document.getElementById('rTree').textContent = (co2/9.5).toFixed(2);
   document.getElementById('calcResult').classList.add('show');
 }
-
-function renderDashboard() {
-  const totalCO2 = records.reduce((s,r) => s+(r.co2e_kg||0), 0);
-  const totalW   = records.reduce((s,r) => s+(r.weight_kg||0), 0);
-  document.getElementById('statCO2').textContent    = totalCO2.toFixed(2);
-  document.getElementById('statTree').textContent   = (totalCO2/9.5).toFixed(1);
-  document.getElementById('statWeight').textContent = totalW.toFixed(2);
-  document.getElementById('statCount').textContent  = records.length;
-
-  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  const now = new Date(), monthData = Array(6).fill(0), monthLabels = [];
-  for (let i=5; i>=0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    monthLabels.push(months[d.getMonth()]);
-    records.forEach(r => {
-      const rd = new Date(r.timestamp||r.date_th);
-      if (rd.getMonth()===d.getMonth() && rd.getFullYear()===d.getFullYear()) monthData[5-i]+=r.co2e_kg||0;
-    });
-  }
-  const maxVal = Math.max(...monthData, 0.1);
-  document.getElementById('monthChart').innerHTML = monthLabels.map((m,i) => {
-    const h = Math.round((monthData[i]/maxVal)*120);
-    return '<div class="month-bar-col"><div class="month-bar'+(i===5?' active':'')+'" style="height:'+h+'px"></div><span class="month-label">'+m+'</span></div>';
-  }).join('');
-
-  const recent = document.getElementById('recentLog');
-  if (!records.length) {
-    recent.innerHTML = '<div class="empty-state"><div class="empty-icon">🌱</div><p>ยังไม่มีการบันทึก<br>กดแท็บ "บันทึก" เพื่อเริ่มต้น!</p></div>';
-  } else {
-    recent.innerHTML = records.slice(0,4).map(r => {
-      const w = WASTE_TYPES.find(t=>t.id===r.waste_type);
-      return '<div class="log-item"><div class="log-icon">'+(w?w.icon:'♻️')+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+' — ห้อง '+(r.class_room||'-')+'</div><div class="log-meta">'+r.date_th+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg</div></div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
-    }).join('');
-  }
-}
-
-function renderHistory() {
-  const list = document.getElementById('historyList');
-  if (!records.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>ยังไม่มีข้อมูล</p></div>'; return; }
-  list.innerHTML = records.map(r => {
-    const w = WASTE_TYPES.find(t=>t.id===r.waste_type);
-    return '<div class="log-item"><div class="log-icon">'+(w?w.icon:'♻️')+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+'</div><div class="log-meta">ห้อง '+(r.class_room||'-')+' · '+r.date_th+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg</div></div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
-  }).join('');
-}
-
-function exportCSV() {
-  if (!records.length) { showToast('ยังไม่มีข้อมูล'); return; }
-  let csv = 'วันที่,ประเภทขยะ,ห้องเรียน,น้ำหนัก (kg),CO2e (kg),ต้นไม้ (ต้น)\n';
-  records.forEach(r => {
-    csv += r.date_th+','+(r.waste_name||'')+','+(r.class_room||'')+','+parseFloat(r.weight_kg).toFixed(3)+','+parseFloat(r.co2e_kg).toFixed(3)+','+parseFloat(r.trees_equiv||0).toFixed(3)+'\n';
-  });
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
-  a.download = 'GHG_'+currentSchool.code+'_Report.csv';
-  a.click();
-}
-
 function showPage(id, tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
