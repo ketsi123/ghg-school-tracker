@@ -147,6 +147,21 @@ select:focus { border-color:var(--g500); }
 .edit-btn { background:var(--s100); color:#0369a1; }
 .delete-btn { background:#fef2f2; color:#dc2626; }
 .action-btn i { font-size:13px; }
+.lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
+.lightbox.open { display:flex; }
+.lightbox img { max-width:100%; max-height:90vh; border-radius:12px; }
+.lightbox-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.2); color:#fff; border:none; border-radius:50%; width:40px; height:40px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.upload-progress { background:var(--g50); border-radius:10px; padding:10px 12px; margin-top:8px; font-size:12px; color:var(--g600); display:none; align-items:center; gap:8px; }
+.upload-progress.show { display:flex; }
+@media (min-width:640px) { .waste-grid { grid-template-columns:repeat(4,1fr); } }
+</style>
+</head>
+<body>
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzG3CCU-Vw8N-OpDBuyznvkm9E_VjANZvPkLznzEO2AWQMQzx7w3WYukYufGq_0Q13f/exec";
+</script>
+
+<!-- EDIT MODAL -->
 <div id="editModal" class="modal-overlay" onclick="if(event.target===this)closeEditModal()">
   <div class="modal-card">
     <div class="modal-header">
@@ -172,17 +187,6 @@ select:focus { border-color:var(--g500); }
     </div>
   </div>
 </div>
-.lightbox.open { display:flex; }
-.lightbox img { max-width:100%; max-height:90vh; border-radius:12px; }
-.lightbox-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.2); color:#fff; border:none; border-radius:50%; width:40px; height:40px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.upload-progress { background:var(--g50); border-radius:10px; padding:10px 12px; margin-top:8px; font-size:12px; color:var(--g600); display:none; align-items:center; gap:8px; }
-.upload-progress.show { display:flex; }
-@media (min-width:640px) { .waste-grid { grid-template-columns:repeat(4,1fr); } }
-</style>
-</head>
-<body>
-<script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzG3CCU-Vw8N-OpDBuyznvkm9E_VjANZvPkLznzEO2AWQMQzx7w3WYukYufGq_0Q13f/exec";
 </script>
 
 <!-- LOGIN -->
