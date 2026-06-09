@@ -498,9 +498,13 @@ async function uploadPhotoNow() {
       uploadedPhotoUrl = res.url;
       showToast('✅ อัปโหลดรูปสำเร็จ');
     } else {
-      showToast('⚠️ อัปโหลดรูปไม่สำเร็จ: '+res.error);
+      showToast('⚠️ ไม่สามารถอัปโหลดรูปได้ — บันทึกได้แต่ไม่มีรูป');
+      uploadedPhotoUrl = '';
     }
-  } catch(e) { showToast('⚠️ อัปโหลดรูปไม่สำเร็จ'); }
+  } catch(e) {
+    showToast('⚠️ ไม่สามารถอัปโหลดรูปได้ — บันทึกได้แต่ไม่มีรูป');
+    uploadedPhotoUrl = '';
+  }
   document.getElementById('uploadProgress').classList.remove('show');
 }
 
@@ -522,7 +526,7 @@ async function saveRecord() {
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
 
-  if (photoBase64 && !uploadedPhotoUrl) { showToast('⏳ กรุณารอรูปอัปโหลดเสร็จก่อน'); return; }
+  if (photoBase64 && uploadedPhotoUrl === null) { showToast('⏳ กรุณารอรูปอัปโหลดเสร็จก่อน'); return; }
 
   const btn = document.getElementById('saveBtn');
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก...';
