@@ -640,6 +640,14 @@ function renderHistory() {
   list.innerHTML=filtered.map(r=>buildLogItem(r,true)).join('');
 }
 
+function getDriveImgUrl(url) {
+  if (!url) return '';
+  // แปลง uc?id= → thumbnail format ที่แสดงได้ใน img tag
+  const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match) return 'https://drive.google.com/thumbnail?id=' + match[1] + '&sz=w800';
+  return url;
+}
+
 function buildLogItem(r, showPhoto) {
   const wt=WASTE_TYPES.find(t=>t.id===r.waste_type);
   const icon=wt?wt.icon:'♻️';
@@ -648,8 +656,9 @@ function buildLogItem(r, showPhoto) {
     try { dateStr=new Date(dateStr).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}); } catch(e){}
   }
   // รูปถ่าย — แสดง thumbnail จริง กดขยายได้ / ไม่มีรูปไม่แสดงอะไร
-  const photoHtml = r.photo_url
-    ? '<div class="log-photo" style="margin-top:6px;"><img src="'+r.photo_url+'" alt="รูปถ่าย" onclick="openLightbox(\''+r.photo_url+'\')" loading="lazy" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid var(--border);"></div>'
+  const imgUrl = getDriveImgUrl(r.photo_url);
+  const photoHtml = imgUrl
+    ? '<div class="log-photo" style="margin-top:6px;"><img src="'+imgUrl+'" alt="รูปถ่าย" onclick="openLightbox(\''+imgUrl+'\')" loading="lazy" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid var(--border);"></div>'
     : '';
   const editDeleteHtml = showPhoto
     ? '<div class="log-actions">'+
