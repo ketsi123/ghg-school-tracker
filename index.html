@@ -345,12 +345,20 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
   <div id="page-record" class="page">
     <div class="card">
       <div class="section-title"><i class="ti ti-recycle"></i>เลือกประเภทขยะ</div>
-      <div class="waste-grid" id="wasteGrid"></div>
+      <div id="wasteGrid"></div>
     </div>
     <div class="card">
       <div style="margin-bottom:12px;">
         <label>น้ำหนัก (กิโลกรัม)</label>
         <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>มูลค่าการขาย (บาท) <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span></label>
+        <input type="number" id="saleValueInput" placeholder="เช่น 150" min="0" step="0.01">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>ชื่อผู้บันทึก <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span></label>
+        <input type="text" id="recorderInput" placeholder="เช่น ครูสมชาย">
       </div>
       <div style="margin-bottom:14px;">
         <label>วันที่บันทึก</label>
@@ -359,19 +367,16 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       <div style="margin-bottom:14px;">
         <label style="display:flex;align-items:center;gap:6px;">
           <i class="ti ti-camera" style="font-size:16px;color:var(--g500);"></i>
-          รูปถ่าย <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span>
+          รูปถ่าย (เพิ่มได้หลายรูป) <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span>
         </label>
         <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
           <div style="font-size:32px;color:var(--g500);margin-bottom:6px;">📷</div>
-          <p style="font-size:13px;color:var(--muted);">กดเพื่อถ่ายภาพหรือเลือกรูป</p>
+          <p style="font-size:13px;color:var(--muted);">กดเพื่อถ่ายหรือเลือกรูป (เลือกได้หลายรูป)</p>
         </div>
-        <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhoto(event)" style="display:none;">
-        <div class="photo-preview" id="photoPreview">
-          <img id="photoImg" src="" alt="preview">
-          <button class="remove-btn" onclick="removePhoto()">✕</button>
-        </div>
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" style="display:none;">
+        <div id="photoPreviewList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
         <div class="upload-progress" id="uploadProgress">
-          <i class="ti ti-loader-2" style="font-size:16px;"></i> กำลังอัปโหลดรูปภาพ...
+          <i class="ti ti-loader-2" style="font-size:16px;"></i> <span id="uploadProgressText">กำลังอัปโหลดรูปภาพ...</span>
         </div>
       </div>
       <div class="result-box" id="calcResult">
@@ -446,14 +451,32 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
 
 <script>
 const WASTE_TYPES = [
-  {id:'paper',    name:'กระดาษ',          icon:'📄', factor:1.0186},
-  {id:'plastic',  name:'พลาสติก',         icon:'🥤', factor:1.7361},
-  {id:'glass',    name:'แก้ว',            icon:'🫙', factor:0.9140},
-  {id:'metal',    name:'เหล็ก',           icon:'🔩', factor:1.7167},
-  {id:'aluminum', name:'อลูมิเนียม',      icon:'🥫', factor:8.1400},
-  {id:'ewaste',   name:'อิเล็กทรอนิกส์', icon:'📱', factor:2.4000},
+  // กระดาษ
+  {id:'paper_box',   name:'กระดาษลัง/ลูกฟูก', icon:'📦', factor:1.0186, group:'กระดาษ'},
+  {id:'paper_mix',   name:'กระดาษย่อย',        icon:'📄', factor:1.0186, group:'กระดาษ'},
+  {id:'newspaper',   name:'หนังสือพิมพ์',       icon:'📰', factor:1.0186, group:'กระดาษ'},
+  // พลาสติก
+  {id:'plastic',     name:'พลาสติกรวม',         icon:'🥤', factor:1.7361, group:'พลาสติก'},
+  {id:'pet_color',   name:'ขวด PET สี',         icon:'🍶', factor:1.7361, group:'พลาสติก'},
+  {id:'plastic_bag', name:'ถุงสะอาด',           icon:'🛍️', factor:1.7361, group:'พลาสติก'},
+  {id:'plastic_wh',  name:'พลาสติกขาวขุ่น',    icon:'🧴', factor:1.7361, group:'พลาสติก'},
+  // แก้ว
+  {id:'glass_clear', name:'แก้วใส',             icon:'🫙', factor:0.9140, group:'แก้ว'},
+  {id:'glass_green', name:'แก้วสีเขียว',        icon:'🍾', factor:0.9140, group:'แก้ว'},
+  {id:'glass_brown', name:'แก้วสีชา/แดง',       icon:'🍺', factor:0.9140, group:'แก้ว'},
+  {id:'glass_mix',   name:'แก้วรวม',            icon:'🥂', factor:0.9140, group:'แก้ว'},
+  // เหล็ก
+  {id:'metal_mix',   name:'เหล็กรวม',           icon:'🔩', factor:1.7167, group:'เหล็ก'},
+  {id:'tin_can',     name:'กระป๋องสังกะสี',     icon:'🥫', factor:1.7167, group:'เหล็ก'},
+  {id:'zinc_sheet',  name:'สังกะสีแผ่น',        icon:'🔧', factor:1.7167, group:'เหล็ก'},
+  // อลูมิเนียม
+  {id:'aluminum',    name:'กระป๋องอลูมิเนียม',  icon:'🧃', factor:8.1400, group:'อลูมิเนียม'},
+  {id:'alum_wheel',  name:'อลูมิเนียมล้อแม็ก', icon:'⚙️', factor:8.1400, group:'อลูมิเนียม'},
+  {id:'alum_thin',   name:'อลูมิเนียมบาง/จั๊บ',icon:'🏮', factor:8.1400, group:'อลูมิเนียม'},
+  // อื่นๆ
+  {id:'ewaste',      name:'อิเล็กทรอนิกส์',    icon:'📱', factor:2.4000, group:'อื่นๆ'},
 ];
-let records=[], selectedWaste=null, currentSchool=null, photoBase64=null, uploadedPhotoUrl=null;
+let records=[], selectedWaste=null, currentSchool=null, uploadedPhotoUrls=[];
 
 window.onload = function() {
   const saved = localStorage.getItem('ghg_school');
@@ -605,60 +628,77 @@ async function loadFromServer() {
   } catch(e) { setSyncStatus('ไม่สามารถเชื่อมต่อได้','error'); }
 }
 
-// ── PHOTO ──
-function handlePhoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const img = new Image();
-    img.onload = function() {
-      const MAX=1024;
-      let w=img.width, h=img.height;
-      if (w>MAX) { h=Math.round(h*MAX/w); w=MAX; }
-      if (h>MAX) { w=Math.round(w*MAX/h); h=MAX; }
-      const canvas=document.createElement('canvas');
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      photoBase64 = canvas.toDataURL('image/jpeg',0.75);
-      document.getElementById('photoImg').src=photoBase64;
-      document.getElementById('photoPreview').style.display='block';
-      uploadPhotoNow();
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadPhotoNow() {
-  uploadedPhotoUrl = null;
-  document.getElementById('uploadProgress').classList.add('show');
-  try {
-    const res = await gasPost({
-      action:'uploadPhoto',
-      school_code: currentSchool.code,
-      photo: photoBase64,
-      mimeType: 'image/jpeg'
-    });
-    if (res.success) {
-      uploadedPhotoUrl = res.url;
-      showToast('✅ อัปโหลดรูปสำเร็จ');
-    } else {
-      showToast('⚠️ ไม่สามารถอัปโหลดรูปได้ — บันทึกได้แต่ไม่มีรูป');
-      uploadedPhotoUrl = '';
-    }
-  } catch(e) {
-    showToast('⚠️ ไม่สามารถอัปโหลดรูปได้ — บันทึกได้แต่ไม่มีรูป');
-    uploadedPhotoUrl = '';
+// ── PHOTOS (multiple) ──
+async function handlePhotos(e) {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+  for (const file of files) {
+    await processAndUploadPhoto(file);
   }
-  document.getElementById('uploadProgress').classList.remove('show');
 }
 
-function removePhoto() {
-  photoBase64=null; uploadedPhotoUrl=null;
-  document.getElementById('photoInput').value='';
-  document.getElementById('photoPreview').style.display='none';
-  document.getElementById('photoImg').src='';
+async function processAndUploadPhoto(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = async function(ev) {
+      const img = new Image();
+      img.onload = async function() {
+        const MAX=1024;
+        let w=img.width, h=img.height;
+        if (w>MAX) { h=Math.round(h*MAX/w); w=MAX; }
+        if (h>MAX) { w=Math.round(w*MAX/h); h=MAX; }
+        const canvas=document.createElement('canvas');
+        canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const base64 = canvas.toDataURL('image/jpeg',0.75);
+
+        // แสดง preview ก่อน
+        const idx = uploadedPhotoUrls.length;
+        uploadedPhotoUrls.push(null); // placeholder
+        const previewList = document.getElementById('photoPreviewList');
+        const div = document.createElement('div');
+        div.id = 'photoThumb_'+idx;
+        div.style.cssText = 'position:relative;width:72px;height:72px;';
+        div.innerHTML = '<img src="'+base64+'" style="width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">'
+          +'<div id="photoThumbOverlay_'+idx+'" style="position:absolute;inset:0;background:rgba(0,0,0,0.4);border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-loader-2" style="color:#fff;font-size:18px;"></i></div>';
+        previewList.appendChild(div);
+
+        document.getElementById('uploadProgress').classList.add('show');
+        document.getElementById('uploadProgressText').textContent = 'อัปโหลดรูป '+(idx+1)+'...';
+
+        try {
+          const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, photo:base64, mimeType:'image/jpeg'});
+          if (res.success) {
+            uploadedPhotoUrls[idx] = res.url;
+            // เปลี่ยน overlay เป็นปุ่มลบ
+            document.getElementById('photoThumbOverlay_'+idx).innerHTML =
+              '<button onclick="removePhotoAt('+idx+')" style="background:rgba(220,38,38,0.85);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✕</button>';
+          } else {
+            uploadedPhotoUrls[idx] = '';
+            document.getElementById('photoThumbOverlay_'+idx).innerHTML = '<span style="color:#fca5a5;font-size:10px;padding:2px;">ผิดพลาด</span>';
+          }
+        } catch(e) {
+          uploadedPhotoUrls[idx] = '';
+        }
+        document.getElementById('uploadProgress').classList.remove('show');
+        resolve();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removePhotoAt(idx) {
+  uploadedPhotoUrls[idx] = null;
+  const div = document.getElementById('photoThumb_'+idx);
+  if (div) div.remove();
+}
+
+function clearPhotos() {
+  uploadedPhotoUrls = [];
+  document.getElementById('photoPreviewList').innerHTML = '';
+  document.getElementById('photoInput').value = '';
 }
 
 // ── SAVE ──
@@ -668,11 +708,14 @@ async function saveRecord() {
   if (!w||w<=0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
   const dateVal = document.getElementById('dateInput').value;
   if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
+  const saleValue = parseFloat(document.getElementById('saleValueInput').value)||0;
+  const recorder  = document.getElementById('recorderInput').value.trim();
   const co2 = w * selectedWaste.factor;
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
 
-  if (photoBase64 && uploadedPhotoUrl === null) { showToast('⏳ กรุณารอรูปอัปโหลดเสร็จก่อน'); return; }
+  // เก็บ photo URLs ที่สำเร็จ (กรอง null ออก)
+  const validPhotos = uploadedPhotoUrls.filter(u => u && u !== null && u !== '');
 
   const btn = document.getElementById('saveBtn');
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก...';
@@ -680,16 +723,22 @@ async function saveRecord() {
     const res = await gasPost({
       action:'saveRecord', school_code:currentSchool.code,
       waste_type:selectedWaste.id, waste_name:selectedWaste.name,
+      waste_group: selectedWaste.group||'',
       weight_kg:w, co2e_kg:co2, trees_equiv:co2/9.5,
+      sale_value: saleValue,
+      recorder: recorder,
       date_th_override: dateTh,
-      photo_url: uploadedPhotoUrl || ''
+      photo_urls: validPhotos  // array of URLs
     });
     if (res.success) {
       showToast('✅ บันทึกสำเร็จ!');
       document.getElementById('weightInput').value='';
+      document.getElementById('saleValueInput').value='';
+      document.getElementById('recorderInput').value='';
       document.getElementById('calcResult').classList.remove('show');
       document.querySelectorAll('.waste-btn').forEach(b=>b.classList.remove('selected'));
-      selectedWaste=null; removePhoto();
+      selectedWaste=null;
+      clearPhotos();
       await loadFromServer();
       showPage('dashboard', document.querySelectorAll('.nav-tab')[0]);
     } else showToast('❌ '+(res.error||'บันทึกไม่สำเร็จ'));
@@ -788,9 +837,8 @@ function renderHistory() {
 
 function getDriveImgUrl(url) {
   if (!url) return '';
-  // แปลง uc?id= → thumbnail format ที่แสดงได้ใน img tag
   const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (match) return 'https://drive.google.com/thumbnail?id=' + match[1] + '&sz=w800';
+  if (match) return 'https://drive.google.com/thumbnail?id='+match[1]+'&sz=w400';
   return url;
 }
 
@@ -801,18 +849,28 @@ function buildLogItem(r, showPhoto) {
   if (dateStr && dateStr.includes('T')) {
     try { dateStr=new Date(dateStr).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}); } catch(e){}
   }
-  // รูปถ่าย — แสดง thumbnail จริง กดขยายได้ / ไม่มีรูปไม่แสดงอะไร
-  const imgUrl = getDriveImgUrl(r.photo_url);
-  const photoHtml = imgUrl
-    ? '<div style="margin-top:5px;"><img src="'+imgUrl+'" alt="รูปถ่าย" onclick="openLightbox(\''+imgUrl+'\')" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border);vertical-align:middle;"> <span style="font-size:11px;color:var(--g500);vertical-align:middle;">กดดูรูปเต็ม</span></div>'
-    : '';
+  // รูปถ่าย — รองรับทั้ง photo_urls (array) และ photo_url (string เดิม)
+  let photoHtml = '';
+  const urls = (r.photo_urls && r.photo_urls.length > 0)
+    ? r.photo_urls
+    : (r.photo_url ? [r.photo_url] : []);
+  if (urls.length > 0) {
+    const imgs = urls.map(u => {
+      const imgUrl = getDriveImgUrl(u);
+      return imgUrl ? '<img src="'+imgUrl+'" onclick="openLightbox(''+imgUrl+'')" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border);">' : '';
+    }).join('');
+    photoHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;">'+imgs+'</div>';
+  }
+  let extraMeta = '';
+  if (r.recorder) extraMeta += ' · 👤 '+r.recorder;
+  if (r.sale_value && parseFloat(r.sale_value) > 0) extraMeta += ' · 💰 '+parseFloat(r.sale_value).toFixed(0)+' บาท';
   const editDeleteHtml = showPhoto
     ? '<div class="log-actions">'+
-        '<button class="action-btn edit-btn" onclick="openEditModal(\''+r.row_index+'\')"><i class="ti ti-edit"></i> แก้ไข</button>'+
-        '<button class="action-btn delete-btn" onclick="confirmDelete(\''+r.row_index+'\',\''+(r.waste_name||r.waste_type)+'\')"><i class="ti ti-trash"></i> ลบ</button>'+
+        '<button class="action-btn edit-btn" onclick="openEditModal(''+r.row_index+'')"><i class="ti ti-edit"></i> แก้ไข</button>'+
+        '<button class="action-btn delete-btn" onclick="confirmDelete(''+r.row_index+'',''+(r.waste_name||r.waste_type)+'')"><i class="ti ti-trash"></i> ลบ</button>'+
       '</div>'
     : '';
-  return '<div class="log-item"><div class="log-icon">'+icon+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+'</div><div class="log-meta">'+dateStr+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg</div>'+photoHtml+editDeleteHtml+'</div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
+  return '<div class="log-item"><div class="log-icon">'+icon+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+'</div><div class="log-meta">'+dateStr+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg'+extraMeta+'</div>'+photoHtml+editDeleteHtml+'</div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
 }
 
 // ── EDIT MODAL ──
@@ -910,11 +968,12 @@ function exportFiltered(src) {
   const year=document.getElementById(yearId).value;
   const month=document.getElementById(monthId).value;
   const suffix=(year!=='all'?'_'+year:'')+(month!=='all'?'_เดือน'+month:'');
-  let csv='วันที่,ประเภทขยะ,น้ำหนัก (kg),CO2e (kg),ต้นไม้ (ต้น),รูปถ่าย\n';
+  let csv='วันที่,ประเภทขยะ,หมวดหมู่,น้ำหนัก (kg),CO2e (kg),ต้นไม้ (ต้น),มูลค่า (บาท),ผู้บันทึก,รูปถ่าย\n';
   filtered.forEach(r=>{
     let d=r.date_th||'';
     if (d.includes('T')) { try{d=new Date(d).toLocaleDateString('th-TH');}catch(e){} }
-    csv+=d+','+(r.waste_name||'')+','+parseFloat(r.weight_kg).toFixed(3)+','+parseFloat(r.co2e_kg).toFixed(3)+','+parseFloat(r.trees_equiv||0).toFixed(3)+','+(r.photo_url||'-')+'\n';
+    const photos=(r.photo_urls||[]).join(' | ')||(r.photo_url||'-');
+    csv+=d+','+(r.waste_name||'')+','+(r.waste_group||'')+','+parseFloat(r.weight_kg).toFixed(3)+','+parseFloat(r.co2e_kg).toFixed(3)+','+parseFloat(r.trees_equiv||0).toFixed(3)+','+parseFloat(r.sale_value||0).toFixed(2)+','+(r.recorder||'-')+','+photos+'\n';
   });
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
@@ -1032,12 +1091,28 @@ function drawWasteBars(data) {
 
 function buildWasteGrid() {
   const grid=document.getElementById('wasteGrid');
-  WASTE_TYPES.forEach(w=>{
-    const btn=document.createElement('button');
-    btn.className='waste-btn'; btn.id='wb_'+w.id;
-    btn.onclick=()=>selectWaste(w.id);
-    btn.innerHTML='<span class="icon">'+w.icon+'</span><span class="name">'+w.name+'</span><span class="factor">'+w.factor+' kgCO₂e</span>';
-    grid.appendChild(btn);
+  // จัดกลุ่ม
+  const groups = {};
+  WASTE_TYPES.forEach(w => {
+    if (!groups[w.group]) groups[w.group] = [];
+    groups[w.group].push(w);
+  });
+  const groupColors = {'กระดาษ':'#fef9c3','พลาสติก':'#dbeafe','แก้ว':'#e0f2fe','เหล็ก':'#fde8d8','อลูมิเนียม':'#f3e8ff','อื่นๆ':'#f1f5f9'};
+  Object.entries(groups).forEach(([grp, types]) => {
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size:12px;font-weight:700;color:var(--g600);margin:10px 0 6px;padding:4px 8px;background:'+groupColors[grp]+';border-radius:8px;display:inline-block;';
+    label.textContent = grp;
+    grid.appendChild(label);
+    const row = document.createElement('div');
+    row.className = 'waste-grid';
+    types.forEach(w => {
+      const btn = document.createElement('button');
+      btn.className='waste-btn'; btn.id='wb_'+w.id;
+      btn.onclick=()=>selectWaste(w.id);
+      btn.innerHTML='<span class="icon">'+w.icon+'</span><span class="name">'+w.name+'</span><span class="factor">'+w.factor+' kgCO₂e</span>';
+      row.appendChild(btn);
+    });
+    grid.appendChild(row);
   });
 }
 function buildFactorTable() {
