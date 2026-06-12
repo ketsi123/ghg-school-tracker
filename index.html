@@ -68,6 +68,9 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .donut-legend-item { display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12px; color:var(--text); }
 .donut-legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
 .donut-legend-pct { font-size:11px; color:var(--muted); margin-left:auto; font-weight:600; }
+#donutLegend::-webkit-scrollbar { width:3px; }
+#donutLegend::-webkit-scrollbar-track { background:var(--g50); border-radius:3px; }
+#donutLegend::-webkit-scrollbar-thumb { background:var(--g200); border-radius:3px; }
 
 .waste-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
 .waste-btn { border-radius:14px; border:2px solid transparent; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; transition:all .2s; background:var(--bg); font-family:'Kanit',sans-serif; }
@@ -173,6 +176,31 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       <button onclick="closeBarModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
     </div>
     <div id="barModalContent"></div>
+  </div>
+</div>
+
+<!-- SALE EXPAND MODAL -->
+<div class="modal-overlay" id="saleExpandModal" onclick="if(event.target===this)closeSaleModal()">
+  <div style="background:#fff;border-radius:20px;padding:1.5rem;width:92%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span style="font-size:16px;font-weight:700;color:var(--text);"><i class="ti ti-cash" style="color:var(--g500);"></i> มูลค่าการขาย (บาท)</span>
+      <button onclick="closeSaleModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    </div>
+    <div id="saleModalContent"></div>
+  </div>
+</div>
+
+<!-- DONUT EXPAND MODAL -->
+<div class="modal-overlay" id="donutExpandModal" onclick="if(event.target===this)closeDonutModal()">
+  <div style="background:#fff;border-radius:20px;padding:1.5rem;width:92%;max-width:420px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span style="font-size:16px;font-weight:700;color:var(--text);"><i class="ti ti-chart-donut" style="color:var(--g500);"></i> สัดส่วนขยะแต่ละชนิด</span>
+      <button onclick="closeDonutModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px;">
+      <canvas id="donutChartModal" width="180" height="180"></canvas>
+    </div>
+    <div id="donutLegendModal"></div>
   </div>
 </div>
 
@@ -360,10 +388,15 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     </div>
     <!-- กราฟชนิดขยะ -->
     <div class="card">
-      <div class="section-title"><i class="ti ti-chart-donut"></i>สัดส่วนขยะแต่ละชนิด (kg CO₂e)</div>
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div class="section-title" style="justify-content:space-between;">
+        <span><i class="ti ti-chart-donut"></i> สัดส่วนขยะแต่ละชนิด (kg CO₂e)</span>
+        <button onclick="toggleDonutExpand()" id="donutExpandBtn" style="background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:4px 8px;font-family:'Kanit',sans-serif;font-size:11px;color:var(--g600);cursor:pointer;display:flex;align-items:center;gap:4px;">
+          <i class="ti ti-arrows-maximize" style="font-size:14px;"></i>ขยาย
+        </button>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;">
         <canvas id="donutChart" width="140" height="140" style="flex-shrink:0;"></canvas>
-        <div id="donutLegend" style="flex:1;min-width:120px;"></div>
+        <div id="donutLegend" style="flex:1;min-width:120px;max-height:140px;overflow-y:auto;padding-right:4px;"></div>
       </div>
     </div>
     <div class="card">
@@ -374,6 +407,16 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
         </button>
       </div>
       <div id="wasteBarChart"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="justify-content:space-between;">
+        <span><i class="ti ti-cash"></i> มูลค่าการขาย (บาท)</span>
+        <button onclick="toggleSaleExpand()" id="saleExpandBtn" style="background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:4px 8px;font-family:'Kanit',sans-serif;font-size:11px;color:var(--g600);cursor:pointer;display:flex;align-items:center;gap:4px;">
+          <i class="ti ti-arrows-maximize" style="font-size:14px;"></i>ขยาย
+        </button>
+      </div>
+      <div id="saleBarChart"></div>
     </div>
 
     <div class="card">
@@ -1227,82 +1270,19 @@ function renderWasteCharts(filtered) {
     const ctx = document.getElementById('donutChart').getContext('2d');
     ctx.clearRect(0,0,140,140);
     document.getElementById('wasteBarChart').innerHTML = '';
+    document.getElementById('saleBarChart').innerHTML = '';
     return;
   }
 
   drawDonut(data);
   drawWasteBars(data);
+  drawSaleBars(filtered);
 }
 
 function drawDonut(data) {
-  const canvas = document.getElementById('donutChart');
-  const ctx = canvas.getContext('2d');
-  const cx=70, cy=68, R=62, r=36;
-  ctx.clearRect(0,0,140,140);
-
+  _lastDonutData = data;
+  drawDonutOnCanvas('donutChart', data, 62, 36);
   const total = data.reduce((s,d)=>s+d.co2,0);
-  let angle = -Math.PI/2;
-
-  // วาด shadow รอบนอก (3D effect)
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,0.18)';
-  ctx.shadowBlur=10;
-  ctx.shadowOffsetY=4;
-  ctx.beginPath();
-  ctx.arc(cx,cy,R,0,Math.PI*2);
-  ctx.fillStyle='#eee';
-  ctx.fill();
-  ctx.restore();
-
-  data.forEach(d => {
-    const slice = (d.co2/total)*Math.PI*2;
-    // วาด slice หลัก
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R,angle,angle+slice);
-    ctx.closePath();
-    ctx.fillStyle = d.color;
-    ctx.fill();
-
-    // วาด highlight ด้านบน (3D shine)
-    const midAngle = angle + slice/2;
-    const grad = ctx.createRadialGradient(
-      cx+Math.cos(midAngle)*R*0.4, cy+Math.sin(midAngle)*R*0.4, 2,
-      cx, cy, R
-    );
-    grad.addColorStop(0, 'rgba(255,255,255,0.35)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R,angle,angle+slice);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    angle += slice;
-  });
-
-  // รูตรงกลาง + shadow
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,0.1)';
-  ctx.shadowBlur=6;
-  ctx.beginPath();
-  ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.fillStyle='#fff';
-  ctx.fill();
-  ctx.restore();
-
-  // ตัวเลขกลาง
-  ctx.fillStyle='#1a2e22';
-  ctx.font='bold 14px Kanit,sans-serif';
-  ctx.textAlign='center';
-  ctx.textBaseline='middle';
-  ctx.fillText(total.toFixed(1), cx, cy-4);
-  ctx.font='10px Kanit,sans-serif';
-  ctx.fillStyle='#6b8a74';
-  ctx.fillText('kgCO₂e', cx, cy+11);
-
-  // Legend
   document.getElementById('donutLegend').innerHTML = data.map(d => {
     const pct = ((d.co2/total)*100).toFixed(1);
     return '<div class="donut-legend-item">'+
@@ -1311,6 +1291,85 @@ function drawDonut(data) {
       '<span class="donut-legend-pct">'+pct+'%</span></div>';
   }).join('');
 }
+
+
+function drawDonutOnCanvas(canvasId, data, R, r) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !data.length) return;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width/2, cy = canvas.height/2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const total = data.reduce((s,d)=>s+d.co2,0);
+  let angle = -Math.PI/2;
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.18)'; ctx.shadowBlur=10; ctx.shadowOffsetY=4;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#eee'; ctx.fill();
+  ctx.restore();
+  data.forEach(d => {
+    const slice=(d.co2/total)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,angle,angle+slice); ctx.closePath();
+    ctx.fillStyle=d.color; ctx.fill();
+    const midAngle=angle+slice/2;
+    const grad=ctx.createRadialGradient(cx+Math.cos(midAngle)*R*0.4,cy+Math.sin(midAngle)*R*0.4,2,cx,cy,R);
+    grad.addColorStop(0,'rgba(255,255,255,0.35)'); grad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,angle,angle+slice); ctx.closePath();
+    ctx.fillStyle=grad; ctx.fill();
+    angle+=slice;
+  });
+  ctx.save(); ctx.shadowColor='rgba(0,0,0,0.1)'; ctx.shadowBlur=6;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.restore();
+  ctx.fillStyle='#1a2e22'; ctx.font='bold '+(r>40?'16':'12')+'px Kanit,sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(total.toFixed(1), cx, cy-5);
+  ctx.font='10px Kanit,sans-serif'; ctx.fillStyle='#6b8a74';
+  ctx.fillText('kgCO₂e', cx, cy+10);
+}
+
+let _lastSaleData = [];
+function drawSaleBars(filtered) {
+  const byType = {};
+  WASTE_TYPES.forEach(w => { byType[w.id] = { name:w.name, icon:w.icon, color:getWasteColor(w), sale:0 }; });
+  const OLD_MAP = {'paper':'paper_mix','plastic':'plastic','glass':'glass_mix','metal':'metal_mix','aluminum':'aluminum','ewaste':'ewaste'};
+  filtered.forEach(r => {
+    const sv = parseFloat(r.sale_value)||0; if (sv<=0) return;
+    let tid=r.waste_type;
+    if (!byType[tid]&&OLD_MAP[tid]) tid=OLD_MAP[tid];
+    if (!byType[tid]) { const f=WASTE_TYPES.find(t=>t.name===r.waste_name); if(f) tid=f.id; }
+    if (byType[tid]) byType[tid].sale+=sv;
+  });
+  const data=Object.values(byType).filter(d=>d.sale>0).sort((a,b)=>b.sale-a.sale);
+  _lastSaleData=data;
+  const el=document.getElementById('saleBarChart');
+  if (!data.length) { el.innerHTML='<p style="font-size:13px;color:var(--muted);text-align:center;padding:12px 0;">ยังไม่มีข้อมูลมูลค่าการขาย</p>'; return; }
+  const maxS=Math.max(...data.map(d=>d.sale),0.1);
+  const rows=data.map(d=>{
+    const pct=Math.min(Math.max(Math.round((d.sale/maxS)*100),3),100);
+    return '<div class="waste-bar-row">'+
+      '<div class="waste-bar-label"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+d.color+';flex-shrink:0;"></span>'+d.icon+' '+d.name+'</div>'+
+      '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+d.color+';"></div></div>'+
+      '<div class="waste-bar-val" style="width:60px;">฿'+d.sale.toLocaleString()+'</div>'+
+    '</div>';
+  }).join('');
+  el.innerHTML='<div class="waste-bar-wrap-scroll">'+rows+'</div>';
+}
+function toggleSaleExpand() {
+  const modal=document.getElementById('saleExpandModal'); if(!modal) return;
+  const maxS=Math.max(..._lastSaleData.map(d=>d.sale),0.1);
+  const total=_lastSaleData.reduce((s,d)=>s+d.sale,0);
+  document.getElementById('saleModalContent').innerHTML=_lastSaleData.map(d=>{
+    const pct=Math.min(Math.max(Math.round((d.sale/maxS)*100),3),100);
+    return '<div class="waste-bar-row" style="margin-bottom:12px;">'+
+      '<div style="font-size:12px;color:var(--text);width:130px;flex-shrink:0;display:flex;align-items:center;gap:5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">'+
+        '<span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:'+d.color+';flex-shrink:0;"></span>'+d.icon+' '+d.name+'</div>'+
+      '<div style="flex:1;background:#e5e7eb;border-radius:20px;height:20px;overflow:hidden;">'+
+        '<div style="width:'+pct+'%;height:100%;border-radius:20px;background:'+d.color+';min-width:8px;"></div>'+
+      '</div>'+
+      '<div style="font-size:13px;font-weight:700;color:'+d.color+';width:70px;text-align:right;flex-shrink:0;">฿'+d.sale.toLocaleString()+'</div>'+
+    '</div>';
+  }).join('')+'<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:14px;font-weight:700;color:var(--g600);text-align:right;">รวม ฿'+total.toLocaleString()+'</div>';
+  modal.classList.add('open');
+}
+function closeSaleModal() { document.getElementById('saleExpandModal').classList.remove('open'); }
 
 let _lastBarData = [];
 function drawWasteBars(data) {
