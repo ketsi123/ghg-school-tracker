@@ -1424,6 +1424,7 @@ function drawDonutOnCanvas(canvasId, data, R, r) {
   };
 }
 
+let _lastDonutData = [];
 let _lastSaleData = [];
 function drawSaleBars(filtered) {
   const byType = {};
@@ -1454,6 +1455,24 @@ function drawSaleBars(filtered) {
   const sb = document.getElementById('totalSaleBadge');
   if (sb) sb.textContent = '฿'+totalS.toLocaleString();
 }
+function toggleDonutExpand() {
+  const modal = document.getElementById('donutExpandModal'); if (!modal) return;
+  if (!_lastDonutData.length) return;
+  const total = _lastDonutData.reduce((s,d)=>s+d.co2,0);
+  document.getElementById('donutLegendModal').innerHTML = _lastDonutData.map(d => {
+    const pct = ((d.co2/total)*100).toFixed(1);
+    return '<div class="donut-legend-item" style="margin-bottom:8px;">'+
+      '<div class="donut-legend-dot" style="background:'+d.color+';width:14px;height:14px;border-radius:4px;flex-shrink:0;"></div>'+
+      '<span style="flex:1;">'+d.icon+' '+d.name+'</span>'+
+      '<span style="font-size:12px;font-weight:700;color:var(--text);margin-right:8px;">'+d.co2.toFixed(2)+' kg</span>'+
+      '<span class="donut-legend-pct">'+pct+'%</span>'+
+    '</div>';
+  }).join('')+'<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:14px;font-weight:700;color:var(--g600);text-align:right;">รวม '+total.toFixed(2)+' kgCO₂e</div>';
+  drawDonutOnCanvas('donutChartModal', _lastDonutData, 80, 48);
+  modal.classList.add('open');
+}
+function closeDonutModal() { document.getElementById('donutExpandModal').classList.remove('open'); }
+
 function toggleSaleExpand() {
   const modal=document.getElementById('saleExpandModal'); if(!modal) return;
   const maxS=Math.max(..._lastSaleData.map(d=>d.sale),0.1);
