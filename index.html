@@ -437,11 +437,11 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
         <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1">
       </div>
       <div style="margin-bottom:12px;">
-        <label>มูลค่าการขาย (บาท) <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span></label>
+        <label>มูลค่าการขาย (บาท)</label>
         <input type="number" id="saleValueInput" placeholder="เช่น 150" min="0" step="0.01">
       </div>
       <div style="margin-bottom:12px;">
-        <label>ชื่อผู้บันทึก <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span></label>
+        <label>ชื่อผู้บันทึก</label>
         <input type="text" id="recorderInput" placeholder="เช่น ครูสมชาย">
       </div>
       <div style="margin-bottom:14px;">
@@ -451,7 +451,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       <div style="margin-bottom:14px;">
         <label style="display:flex;align-items:center;gap:6px;">
           <i class="ti ti-camera" style="font-size:16px;color:var(--g500);"></i>
-          รูปถ่าย (เพิ่มได้หลายรูป) <span style="font-size:11px;background:var(--a100);color:#92400e;border-radius:20px;padding:1px 8px;font-weight:600;">ไม่บังคับ</span>
+          รูปถ่าย (เพิ่มได้หลายรูป)
         </label>
         <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
           <div style="font-size:32px;color:var(--g500);margin-bottom:6px;">📷</div>
@@ -609,14 +609,29 @@ async function loadSchoolList() {
     const res = await gasGet({action:'listSchools'});
     if (res.success && res.schools.length > 0) {
       container.innerHTML = res.schools.map(s =>
-        '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">'+
-          '<div style="flex:1;">'+
-            '<div style="font-size:14px;font-weight:600;color:var(--text);">'+s.name+'</div>'+
-            '<div style="font-size:11px;color:var(--muted);">รหัส: '+s.code+'</div>'+
+        '<div id="school-row-'+s.code+'" style="padding:10px 0;border-bottom:1px solid var(--border);">'+
+          '<div style="display:flex;align-items:center;gap:8px;">'+
+            '<div style="flex:1;">'+
+              '<div style="font-size:14px;font-weight:600;color:var(--text);">'+s.name+'</div>'+
+              '<div style="font-size:11px;color:var(--muted);">รหัส: '+s.code+'</div>'+
+            '</div>'+
+            '<button onclick="adminEditSchool(\''+s.code+'\',\''+s.name+'\')" '+
+              'style="background:#eff6ff;border:1.5px solid #93c5fd;color:#2563eb;border-radius:8px;padding:5px 10px;font-family:\'Kanit\',sans-serif;font-size:12px;cursor:pointer;font-weight:600;">'+
+              '<i class="ti ti-pencil" style="font-size:13px;vertical-align:-2px;"></i> แก้ไข</button>'+
+            '<button onclick="adminDeleteSchool(\''+s.code+'\',\''+s.name+'\')" '+
+              'style="background:#fef2f2;border:1.5px solid #fca5a5;color:#dc2626;border-radius:8px;padding:5px 10px;font-family:\'Kanit\',sans-serif;font-size:12px;cursor:pointer;font-weight:600;">'+
+              '<i class="ti ti-trash" style="font-size:13px;vertical-align:-2px;"></i> ลบ</button>'+
           '</div>'+
-          '<button onclick="adminDeleteSchool(\''+s.code+'\',\''+s.name+'\')" '+
-            'style="background:#fef2f2;border:1.5px solid #fca5a5;color:#dc2626;border-radius:8px;padding:5px 10px;font-family:\'Kanit\',sans-serif;font-size:12px;cursor:pointer;font-weight:600;">'+
-            '<i class="ti ti-trash" style="font-size:13px;vertical-align:-2px;"></i> ลบ</button>'+
+          '<div id="edit-form-'+s.code+'" style="display:none;margin-top:10px;background:var(--g50);border-radius:10px;padding:10px;">'+
+            '<div style="margin-bottom:6px;"><label style="font-size:12px;color:var(--muted);">รหัสโรงเรียน</label>'+
+            '<input id="edit-code-'+s.code+'" value="'+s.code+'" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:\'Kanit\',sans-serif;background:#fff;outline:none;" oninput="this.value=this.value.toUpperCase().replace(/\\s/g,\'\')"></div>'+
+            '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--muted);">ชื่อโรงเรียน</label>'+
+            '<input id="edit-name-'+s.code+'" value="'+s.name+'" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:\'Kanit\',sans-serif;background:#fff;outline:none;"></div>'+
+            '<div style="display:flex;gap:8px;">'+
+              '<button onclick="adminSaveEditSchool(\''+s.code+'\')" style="flex:1;background:var(--g500);border:none;color:#fff;border-radius:8px;padding:7px;font-family:\'Kanit\',sans-serif;font-size:13px;cursor:pointer;font-weight:600;"><i class="ti ti-check"></i> บันทึก</button>'+
+              '<button onclick="adminCancelEdit(\''+s.code+'\')" style="flex:1;background:#f3f4f6;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:7px;font-family:\'Kanit\',sans-serif;font-size:13px;cursor:pointer;">ยกเลิก</button>'+
+            '</div>'+
+          '</div>'+
         '</div>'
       ).join('');
     } else {
@@ -646,6 +661,28 @@ async function adminAddSchool() {
     }
   } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
   btn.disabled = false; btn.innerHTML = '<i class="ti ti-plus"></i>เพิ่มโรงเรียน';
+}
+
+function adminEditSchool(code, name) {
+  document.getElementById('edit-form-'+code).style.display = 'block';
+}
+function adminCancelEdit(code) {
+  document.getElementById('edit-form-'+code).style.display = 'none';
+}
+async function adminSaveEditSchool(oldCode) {
+  const newCode = document.getElementById('edit-code-'+oldCode).value.trim().toUpperCase();
+  const newName = document.getElementById('edit-name-'+oldCode).value.trim();
+  if (!newCode) { showToast('⚠️ กรุณากรอกรหัสโรงเรียน'); return; }
+  if (!newName) { showToast('⚠️ กรุณากรอกชื่อโรงเรียน'); return; }
+  try {
+    const res = await gasPost({action:'editSchool', old_code:oldCode, new_code:newCode, new_name:newName, admin_password:ADMIN_PASSWORD});
+    if (res.success) {
+      showToast('✅ แก้ไขสำเร็จ!');
+      loadSchoolList();
+    } else {
+      showToast('❌ '+(res.error||'แก้ไขไม่สำเร็จ'));
+    }
+  } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
 }
 
 async function adminDeleteSchool(code, name) {
@@ -788,10 +825,14 @@ async function saveRecord() {
   if (!selectedWaste) { showToast('⚠️ กรุณาเลือกประเภทขยะ'); return; }
   const w = parseFloat(document.getElementById('weightInput').value);
   if (!w||w<=0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
+  const saleValue = parseFloat(document.getElementById('saleValueInput').value);
+  if (!saleValue||saleValue<=0) { showToast('⚠️ กรุณาใส่มูลค่าการขาย'); return; }
+  const recorder = document.getElementById('recorderInput').value.trim();
+  if (!recorder) { showToast('⚠️ กรุณาใส่ชื่อผู้บันทึก'); return; }
   const dateVal = document.getElementById('dateInput').value;
   if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
-  const saleValue = parseFloat(document.getElementById('saleValueInput').value)||0;
-  const recorder  = document.getElementById('recorderInput').value.trim();
+  const validPhotos = uploadedPhotoUrls.filter(u => u && u !== null && u !== '');
+  if (validPhotos.length === 0) { showToast('⚠️ กรุณาเพิ่มรูปถ่ายอย่างน้อย 1 รูป'); return; }
   const co2 = w * selectedWaste.factor;
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
