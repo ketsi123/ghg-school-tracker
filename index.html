@@ -891,7 +891,7 @@ function buildLogItem(r, showPhoto) {
   if (urls.length > 0) {
     const imgs = urls.map(u => {
       const imgUrl = getDriveImgUrl(u);
-      return imgUrl ? '<img src="'+imgUrl+'" onclick="openLightbox(\\"'+imgUrl+'\\")" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border);">' : '';
+      return imgUrl ? '<img src="'+imgUrl+'" onclick="openLightbox(this.src)" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border);">' : '';
     }).join('');
     photoHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;">'+imgs+'</div>';
   }
@@ -900,8 +900,8 @@ function buildLogItem(r, showPhoto) {
   if (r.sale_value && parseFloat(r.sale_value) > 0) extraMeta += ' · 💰 '+parseFloat(r.sale_value).toFixed(0)+' บาท';
   const editDeleteHtml = showPhoto
     ? '<div class="log-actions">'+
-        '<button class="action-btn edit-btn" onclick="openEditModal(\\"'+r.row_index+'\\")"><i class="ti ti-edit"></i> แก้ไข</button>'+
-        '<button class="action-btn delete-btn" onclick="confirmDelete(\\"'+r.row_index+'\\",\\"'+(r.waste_name||r.waste_type)+'\\")"><i class="ti ti-trash"></i> ลบ</button>'+
+        '<button class="action-btn edit-btn" onclick="openEditModal('+r.row_index+')"><i class="ti ti-edit"></i> แก้ไข</button>'+
+        '<button class="action-btn delete-btn" onclick="confirmDelete('+r.row_index+',\'+'+(r.waste_name||r.waste_type).replace(/'/g,'')+'\')"><i class="ti ti-trash"></i> ลบ</button>'+
       '</div>'
     : '';
   return '<div class="log-item"><div class="log-icon">'+icon+'</div><div class="log-info"><div class="log-name">'+(r.waste_name||r.waste_type)+'</div><div class="log-meta">'+dateStr+' · '+parseFloat(r.weight_kg).toFixed(2)+' kg'+extraMeta+'</div>'+photoHtml+editDeleteHtml+'</div><div class="log-co2">-'+parseFloat(r.co2e_kg).toFixed(2)+'<br><span style="font-size:10px;font-weight:400;color:var(--muted)">kgCO₂e</span></div></div>';
