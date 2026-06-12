@@ -141,9 +141,9 @@ select:focus { border-color:var(--g500); }
 .toast.show { opacity:1; }
 .summary-box { background:var(--g50); border:1px solid var(--g100); border-radius:12px; padding:12px 14px; margin-bottom:12px; font-size:13px; color:var(--g700); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
 .summary-box b { font-size:16px; color:var(--g600); }
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:8000; align-items:flex-end; justify-content:center; padding:0; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:8000; align-items:center; justify-content:center; padding:1rem; }
 .modal-overlay.open { display:flex; }
-.modal-card { background:#fff; border-radius:24px 24px 0 0; padding:1.5rem; width:100%; max-width:480px; }
+.modal-card { background:#fff; border-radius:20px; padding:1.5rem; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; }
 .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
 .log-actions { display:flex; gap:6px; margin-top:6px; }
 .action-btn { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; cursor:pointer; font-family:'Kanit',sans-serif; border:none; transition:opacity .15s; }
@@ -191,6 +191,14 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     <div style="margin-bottom:12px;">
       <label>น้ำหนัก (กิโลกรัม)</label>
       <input type="number" id="editWeight" min="0.01" step="0.1" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Kanit',sans-serif;background:var(--bg);color:var(--text);outline:none;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label>มูลค่าการขาย (บาท)</label>
+      <input type="number" id="editSaleValue" min="0" step="0.01" placeholder="เช่น 150" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Kanit',sans-serif;background:var(--bg);color:var(--text);outline:none;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label>ชื่อผู้บันทึก</label>
+      <input type="text" id="editRecorder" placeholder="เช่น ครูสมชาย" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Kanit',sans-serif;background:var(--bg);color:var(--text);outline:none;">
     </div>
     <div style="margin-bottom:16px;">
       <label>วันที่</label>
@@ -251,7 +259,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
 
 <!-- ADMIN PANEL MODAL -->
 <div class="modal-overlay" id="adminPanel" onclick="if(event.target===this)closeAdminPanel()">
-  <div class="modal-card" style="border-radius:24px 24px 0 0;max-height:85vh;overflow-y:auto;">
+  <div class="modal-card" style="max-height:85vh;">
     <div class="modal-header">
       <span style="font-size:16px;font-weight:700;color:var(--text);">⚙️ จัดการโรงเรียน</span>
       <button onclick="closeAdminPanel()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
@@ -930,6 +938,8 @@ function openEditModal(rowIndex) {
     try { const d=new Date(r.timestamp); dateVal=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); } catch(e){}
   }
   document.getElementById('editDate').value = dateVal;
+  document.getElementById('editSaleValue').value = parseFloat(r.sale_value)||'';
+  document.getElementById('editRecorder').value = r.recorder||'';
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -942,6 +952,8 @@ async function saveEdit() {
   const wasteId  = document.getElementById('editWasteType').value;
   const weight   = parseFloat(document.getElementById('editWeight').value);
   const dateVal  = document.getElementById('editDate').value;
+  const saleValue = parseFloat(document.getElementById('editSaleValue').value)||0;
+  const recorder  = document.getElementById('editRecorder').value.trim();
   if (!weight||weight<=0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
   if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
   const wt = WASTE_TYPES.find(w=>w.id===wasteId);
@@ -957,9 +969,12 @@ async function saveEdit() {
       row_index:rowIndex,
       waste_type:wasteId,
       waste_name:wt?wt.name:wasteId,
+      waste_group:wt?wt.group:'',
       weight_kg:weight,
       co2e_kg:co2,
       trees_equiv:co2/9.5,
+      sale_value:saleValue,
+      recorder:recorder,
       date_th_override:dateTh
     });
     if (res.success) {
