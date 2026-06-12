@@ -1345,6 +1345,9 @@ function drawDonutOnCanvas(canvasId, data, R, r) {
   ctx.shadowColor='rgba(0,0,0,0.18)'; ctx.shadowBlur=10; ctx.shadowOffsetY=4;
   ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#eee'; ctx.fill();
   ctx.restore();
+
+  // เก็บ slice angles สำหรับ tooltip
+  const slices = [];
   data.forEach(d => {
     const slice=(d.co2/total)*Math.PI*2;
     ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,angle,angle+slice); ctx.closePath();
@@ -1354,6 +1357,7 @@ function drawDonutOnCanvas(canvasId, data, R, r) {
     grad.addColorStop(0,'rgba(255,255,255,0.35)'); grad.addColorStop(1,'rgba(255,255,255,0)');
     ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,angle,angle+slice); ctx.closePath();
     ctx.fillStyle=grad; ctx.fill();
+    slices.push({ start:angle, end:angle+slice, d });
     angle+=slice;
   });
   ctx.save(); ctx.shadowColor='rgba(0,0,0,0.1)'; ctx.shadowBlur=6;
@@ -1363,6 +1367,61 @@ function drawDonutOnCanvas(canvasId, data, R, r) {
   ctx.fillText(total.toFixed(1), cx, cy-5);
   ctx.font='10px Kanit,sans-serif'; ctx.fillStyle='#6b8a74';
   ctx.fillText('kgCO₂e', cx, cy+10);
+
+  // tooltip
+  let tooltipEl = document.getElementById('donutTooltip');
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div');
+    tooltipEl.id = 'donutTooltip';
+    tooltipEl.style.cssText = 'position:fixed;background:rgba(20,40,30,0.92);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;font-family:Kanit,sans-serif;pointer-events:none;display:none;z-index:9999;white-space:nowrap;';
+    document.body.appendChild(tooltipEl);
+  }
+
+  function getSlice(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const dx = mx - cx, dy = my - cy;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    if (dist < r || dist > R) return null;
+    let a = Math.atan2(dy, dx);
+    return slices.find(s => {
+      let start = s.start, end = s.end;
+      if (a < start) a += Math.PI*2;
+      return a >= start && a <= end;
+    }) || null;
+  }
+
+  canvas.onmousemove = (e) => {
+    const hit = getSlice(e);
+    if (hit) {
+      const pct = ((hit.d.co2/total)*100).toFixed(1);
+      tooltipEl.innerHTML = hit.d.icon+' <b>'+hit.d.name+'</b><br>'+hit.d.co2.toFixed(2)+' kgCO₂e ('+pct+'%)';
+      tooltipEl.style.display = 'block';
+      tooltipEl.style.left = (e.clientX+12)+'px';
+      tooltipEl.style.top  = (e.clientY-10)+'px';
+      canvas.style.cursor = 'pointer';
+    } else {
+      tooltipEl.style.display = 'none';
+      canvas.style.cursor = 'default';
+    }
+  };
+  canvas.onmouseleave = () => { tooltipEl.style.display='none'; canvas.style.cursor='default'; };
+  canvas.ontouchstart = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const hit = getSlice(touch);
+    if (hit) {
+      const pct = ((hit.d.co2/total)*100).toFixed(1);
+      tooltipEl.innerHTML = hit.d.icon+' <b>'+hit.d.name+'</b><br>'+hit.d.co2.toFixed(2)+' kgCO₂e ('+pct+'%)';
+      tooltipEl.style.display = 'block';
+      tooltipEl.style.left = (touch.clientX+12)+'px';
+      tooltipEl.style.top  = (touch.clientY-40)+'px';
+      setTimeout(()=>{ tooltipEl.style.display='none'; }, 2500);
+    }
+  };
 }
 
 let _lastSaleData = [];
