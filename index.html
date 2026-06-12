@@ -444,8 +444,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     <div class="card" style="padding:12px 16px;">
       <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;"><i class="ti ti-filter" style="font-size:16px;color:var(--g500);vertical-align:-2px;"></i> กรองประวัติ</div>
       <div class="filter-row">
-        <select id="histYear" onchange="renderHistory()"><option value="all">ทุกปี</option></select>
-        <select id="histMonth" onchange="renderHistory()">
+        <select id="histYear" onchange="renderHistory(1)"><option value="all">ทุกปี</option></select>
+        <select id="histMonth" onchange="renderHistory(1)">
           <option value="all">ทุกเดือน</option>
           <option value="1">ม.ค.</option><option value="2">ก.พ.</option><option value="3">มี.ค.</option>
           <option value="4">เม.ย.</option><option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
@@ -453,15 +453,13 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
           <option value="10">ต.ค.</option><option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
         </select>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button onclick="exportFiltered('hist')" class="dl-btn" style="flex:1;"><i class="ti ti-file-spreadsheet"></i>ดาวน์โหลด CSV</button>
-        <button onclick="loadFromServer()" class="dl-btn-outline" style="flex:1;"><i class="ti ti-refresh"></i>โหลดใหม่</button>
-      </div>
+      <button onclick="exportFiltered('hist')" class="dl-btn" style="width:100%;"><i class="ti ti-file-spreadsheet"></i>ดาวน์โหลด CSV</button>
     </div>
     <div class="card">
       <div class="section-title"><i class="ti ti-clock-history"></i>รายการทั้งหมด</div>
       <div id="histSummary"></div>
       <div id="historyList"></div>
+      <div id="histPagination" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap;"></div>
     </div>
   </div>
 
@@ -791,11 +789,14 @@ async function saveRecord() {
 // ── FILTER ──
 function buildYearOptions() {
   const years=[...new Set(records.map(r=>new Date(r.timestamp||r.date_th).getFullYear()))].sort((a,b)=>b-a);
+  const currentYear = new Date().getFullYear();
   ['filterYear','histYear'].forEach(id=>{
-    const sel=document.getElementById(id), cur=sel.value;
+    const sel=document.getElementById(id);
+    const isHist = id === 'histYear';
     sel.innerHTML='<option value="all">ทุกปี</option>';
     years.forEach(y=>{ sel.innerHTML+='<option value="'+y+'">'+y+'</option>'; });
-    sel.value=cur;
+    // histYear default = ปีปัจจุบัน
+    if (isHist && years.includes(currentYear)) sel.value = String(currentYear);
   });
 }
 function getFilteredRecords(yearId,monthId) {
@@ -862,19 +863,61 @@ function renderDashboard(filtered) {
 }
 
 // ── HISTORY ──
-function renderHistory() {
-  const filtered=getFilteredRecords('histYear','histMonth');
-  const list=document.getElementById('historyList');
-  const summary=document.getElementById('histSummary');
+const HIST_PAGE_SIZE = 10;
+let histCurrentPage = 1;
+
+function renderHistory(page) {
+  if (page) histCurrentPage = page;
+  const filtered = getFilteredRecords('histYear','histMonth');
+  const list    = document.getElementById('historyList');
+  const summary = document.getElementById('histSummary');
+  const pagination = document.getElementById('histPagination');
+
   if (!filtered.length) {
-    summary.innerHTML='';
-    list.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><p>ไม่มีข้อมูลในช่วงที่เลือก</p></div>';
+    summary.innerHTML = '';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>ไม่มีข้อมูลในช่วงที่เลือก</p></div>';
+    pagination.innerHTML = '';
     return;
   }
-  const totalCO2=filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
-  const totalW=filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
-  summary.innerHTML='<div class="summary-box"><span>รวม <b>'+filtered.length+'</b> รายการ</span><span>น้ำหนัก <b>'+totalW.toFixed(2)+' kg</b></span><span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span></div>';
-  list.innerHTML=filtered.map(r=>buildLogItem(r,true)).join('');
+
+  const totalCO2 = filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
+  const totalW   = filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
+  const totalPages = Math.ceil(filtered.length / HIST_PAGE_SIZE);
+  if (histCurrentPage > totalPages) histCurrentPage = totalPages;
+
+  const start = (histCurrentPage-1)*HIST_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start+HIST_PAGE_SIZE);
+
+  summary.innerHTML = '<div class="summary-box">'+
+    '<span>รวม <b>'+filtered.length+'</b> รายการ</span>'+
+    '<span>น้ำหนัก <b>'+totalW.toFixed(2)+' kg</b></span>'+
+    '<span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span></div>';
+
+  list.innerHTML = pageItems.map(r=>buildLogItem(r,true)).join('');
+
+  // Pagination buttons
+  if (totalPages <= 1) { pagination.innerHTML=''; return; }
+  let pHtml = '';
+  // ปุ่ม ก่อนหน้า
+  pHtml += '<button onclick="renderHistory('+(histCurrentPage-1)+')" '+(histCurrentPage===1?'disabled':'')+
+    ' style="padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:'+(histCurrentPage===1?'var(--bg)':'#fff')+
+    ';color:var(--muted);font-family:\'Kanit\',sans-serif;font-size:12px;cursor:'+(histCurrentPage===1?'default':'pointer')+';">‹</button>';
+  // เลขหน้า — แสดง max 5 หน้า
+  const startP = Math.max(1, histCurrentPage-2);
+  const endP   = Math.min(totalPages, startP+4);
+  for (let p=startP; p<=endP; p++) {
+    const active = p===histCurrentPage;
+    pHtml += '<button onclick="renderHistory('+p+')" style="padding:6px 12px;border:1.5px solid '+(active?'var(--g500)':'var(--border)')+
+      ';border-radius:8px;background:'+(active?'var(--g500)':'#fff')+
+      ';color:'+(active?'#fff':'var(--text)')+
+      ';font-family:\'Kanit\',sans-serif;font-size:12px;font-weight:'+(active?'700':'400')+';cursor:pointer;">'+p+'</button>';
+  }
+  // ปุ่ม ถัดไป
+  pHtml += '<button onclick="renderHistory('+(histCurrentPage+1)+')" '+(histCurrentPage===totalPages?'disabled':'')+
+    ' style="padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:'+(histCurrentPage===totalPages?'var(--bg)':'#fff')+
+    ';color:var(--muted);font-family:\'Kanit\',sans-serif;font-size:12px;cursor:'+(histCurrentPage===totalPages?'default':'pointer')+';">›</button>';
+  pHtml += '<span style="font-size:11px;color:var(--muted);">หน้า '+histCurrentPage+'/'+totalPages+'</span>';
+  pagination.innerHTML = pHtml;
 }
 
 function getIconByName(name) {
