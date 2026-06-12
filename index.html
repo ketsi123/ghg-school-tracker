@@ -208,6 +208,64 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       <i class="ti ti-login"></i>เข้าสู่ระบบ
     </button>
     <div class="login-divider">ติดต่อ LAB เพื่อขอรหัสโรงเรียน</div>
+    <button onclick="openAdminLogin()" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:12px;background:none;font-family:'Kanit',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+      <i class="ti ti-settings" style="font-size:16px;"></i>จัดการโรงเรียน (Admin)
+    </button>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-overlay" id="adminLoginModal" onclick="if(event.target===this)closeAdminLogin()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span style="font-size:16px;font-weight:700;color:var(--text);">⚙️ Admin Login</span>
+      <button onclick="closeAdminLogin()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>รหัสผ่าน Admin</label>
+      <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน"
+             style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:16px;font-family:'Kanit',sans-serif;background:var(--bg);color:var(--text);outline:none;"
+             onkeydown="if(event.key==='Enter') verifyAdminPassword()">
+      <div id="adminLoginError" class="login-error">รหัสผ่านไม่ถูกต้อง</div>
+    </div>
+    <button class="btn-primary" onclick="verifyAdminPassword()">
+      <i class="ti ti-lock-open"></i>เข้าสู่ระบบ Admin
+    </button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div class="modal-overlay" id="adminPanel" onclick="if(event.target===this)closeAdminPanel()">
+  <div class="modal-card" style="border-radius:24px 24px 0 0;max-height:85vh;overflow-y:auto;">
+    <div class="modal-header">
+      <span style="font-size:16px;font-weight:700;color:var(--text);">⚙️ จัดการโรงเรียน</span>
+      <button onclick="closeAdminPanel()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    </div>
+
+    <!-- เพิ่มโรงเรียนใหม่ -->
+    <div style="background:var(--g50);border-radius:12px;padding:14px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;"><i class="ti ti-plus" style="color:var(--g500);"></i> เพิ่มโรงเรียนใหม่</div>
+      <div style="margin-bottom:8px;">
+        <label>รหัสโรงเรียน (ตัวพิมพ์ใหญ่ ไม่มีเว้นวรรค)</label>
+        <input type="text" id="newSchoolCode" placeholder="เช่น SCH002"
+               oninput="this.value=this.value.toUpperCase().replace(/\s/g,'')"
+               style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Kanit',sans-serif;background:#fff;outline:none;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label>ชื่อโรงเรียน</label>
+        <input type="text" id="newSchoolName" placeholder="เช่น โรงเรียนลาดกระบัง"
+               style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Kanit',sans-serif;background:#fff;outline:none;">
+      </div>
+      <button class="btn-primary" onclick="adminAddSchool()" id="addSchoolBtn">
+        <i class="ti ti-plus"></i>เพิ่มโรงเรียน
+      </button>
+    </div>
+
+    <!-- รายชื่อโรงเรียน -->
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;"><i class="ti ti-list" style="color:var(--g500);"></i> โรงเรียนในระบบ</div>
+    <div id="schoolListAdmin">
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">กำลังโหลด...</div>
+    </div>
   </div>
 </div>
 
@@ -409,6 +467,94 @@ window.onload = function() {
     today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
   document.getElementById('weightInput').addEventListener('input', updateCalc);
 };
+
+// ── ADMIN ──
+const ADMIN_PASSWORD = '112344';
+
+function openAdminLogin() {
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminLoginError').classList.remove('show');
+  document.getElementById('adminLoginModal').classList.add('open');
+  setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+}
+function closeAdminLogin() {
+  document.getElementById('adminLoginModal').classList.remove('open');
+}
+function verifyAdminPassword() {
+  const pw = document.getElementById('adminPasswordInput').value;
+  if (pw === ADMIN_PASSWORD) {
+    closeAdminLogin();
+    openAdminPanel();
+  } else {
+    document.getElementById('adminLoginError').classList.add('show');
+  }
+}
+function openAdminPanel() {
+  document.getElementById('adminPanel').classList.add('open');
+  loadSchoolList();
+}
+function closeAdminPanel() {
+  document.getElementById('adminPanel').classList.remove('open');
+}
+
+async function loadSchoolList() {
+  const container = document.getElementById('schoolListAdmin');
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">กำลังโหลด...</div>';
+  try {
+    const res = await gasGet({action:'listSchools'});
+    if (res.success && res.schools.length > 0) {
+      container.innerHTML = res.schools.map(s =>
+        '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">'+
+          '<div style="flex:1;">'+
+            '<div style="font-size:14px;font-weight:600;color:var(--text);">'+s.name+'</div>'+
+            '<div style="font-size:11px;color:var(--muted);">รหัส: '+s.code+'</div>'+
+          '</div>'+
+          '<button onclick="adminDeleteSchool(\''+s.code+'\',\''+s.name+'\')" '+
+            'style="background:#fef2f2;border:1.5px solid #fca5a5;color:#dc2626;border-radius:8px;padding:5px 10px;font-family:\'Kanit\',sans-serif;font-size:12px;cursor:pointer;font-weight:600;">'+
+            '<i class="ti ti-trash" style="font-size:13px;vertical-align:-2px;"></i> ลบ</button>'+
+        '</div>'
+      ).join('');
+    } else {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">ยังไม่มีโรงเรียนในระบบ</div>';
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;font-size:13px;">โหลดไม่สำเร็จ</div>';
+  }
+}
+
+async function adminAddSchool() {
+  const code = document.getElementById('newSchoolCode').value.trim().toUpperCase();
+  const name = document.getElementById('newSchoolName').value.trim();
+  if (!code) { showToast('⚠️ กรุณากรอกรหัสโรงเรียน'); return; }
+  if (!name) { showToast('⚠️ กรุณากรอกชื่อโรงเรียน'); return; }
+  const btn = document.getElementById('addSchoolBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> กำลังเพิ่ม...';
+  try {
+    const res = await gasPost({action:'addSchool', school_code:code, school_name:name, admin_password:ADMIN_PASSWORD});
+    if (res.success) {
+      showToast('✅ เพิ่ม '+name+' สำเร็จ!');
+      document.getElementById('newSchoolCode').value = '';
+      document.getElementById('newSchoolName').value = '';
+      loadSchoolList();
+    } else {
+      showToast('❌ '+(res.error||'เพิ่มไม่สำเร็จ'));
+    }
+  } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-plus"></i>เพิ่มโรงเรียน';
+}
+
+async function adminDeleteSchool(code, name) {
+  if (!confirm('ลบโรงเรียน "'+name+'" ?\nข้อมูลการบันทึกทั้งหมดจะยังอยู่ใน Sheet แต่จะ login ไม่ได้อีก')) return;
+  try {
+    const res = await gasPost({action:'deleteSchool', school_code:code, admin_password:ADMIN_PASSWORD});
+    if (res.success) {
+      showToast('🗑️ ลบ '+name+' แล้ว');
+      loadSchoolList();
+    } else {
+      showToast('❌ '+(res.error||'ลบไม่สำเร็จ'));
+    }
+  } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
+}
 
 // ── LOGIN ──
 async function doLogin() {
