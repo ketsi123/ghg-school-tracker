@@ -837,9 +837,6 @@ async function saveRecord() {
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
 
-  // เก็บ photo URLs ที่สำเร็จ (กรอง null ออก)
-  const validPhotos = uploadedPhotoUrls.filter(u => u && u !== null && u !== '');
-
   const btn = document.getElementById('saveBtn');
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก...';
   try {
