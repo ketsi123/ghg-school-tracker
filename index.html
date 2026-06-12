@@ -57,7 +57,7 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .stat-unit { font-size:11px; color:var(--muted); }
 /* WASTE */
 .waste-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.waste-bar-label { font-size:12px; color:var(--text); width:72px; flex-shrink:0; display:flex; align-items:center; gap:4px; }
+.waste-bar-label { font-size:11px; color:var(--text); width:80px; flex-shrink:0; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .waste-bar-track { flex:1; background:var(--g50); border-radius:20px; height:16px; overflow:hidden; }
 .waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; }
 .waste-bar-val { font-size:11px; font-weight:700; color:var(--muted); width:44px; text-align:right; flex-shrink:0; }
@@ -468,11 +468,11 @@ const WASTE_TYPES = [
   // เหล็ก
   {id:'metal_mix',   name:'เหล็กรวม',           icon:'🔩', factor:1.7167, group:'เหล็ก'},
   {id:'tin_can',     name:'กระป๋องสังกะสี',     icon:'🥫', factor:1.7167, group:'เหล็ก'},
-  {id:'zinc_sheet',  name:'สังกะสีแผ่น',        icon:'🔧', factor:1.7167, group:'เหล็ก'},
+  {id:'zinc_sheet',  name:'สังกะสีแผ่น',        icon:'🪣', factor:1.7167, group:'เหล็ก'},
   // อลูมิเนียม
   {id:'aluminum',    name:'กระป๋องอลูมิเนียม',  icon:'🧃', factor:8.1400, group:'อลูมิเนียม'},
-  {id:'alum_wheel',  name:'อลูมิเนียมล้อแม็ก', icon:'⚙️', factor:8.1400, group:'อลูมิเนียม'},
-  {id:'alum_thin',   name:'อลูมิเนียมบาง/จั๊บ',icon:'🏮', factor:8.1400, group:'อลูมิเนียม'},
+  {id:'alum_wheel',  name:'อลูมิเนียมล้อแม็ก', icon:'🛞', factor:8.1400, group:'อลูมิเนียม'},
+  {id:'alum_thin',   name:'อลูมิเนียมบาง/จั๊บ',icon:'📎', factor:8.1400, group:'อลูมิเนียม'},
   // อื่นๆ
   {id:'ewaste',      name:'อิเล็กทรอนิกส์',    icon:'📱', factor:2.4000, group:'อื่นๆ'},
 ];
@@ -835,6 +835,18 @@ function renderHistory() {
   list.innerHTML=filtered.map(r=>buildLogItem(r,true)).join('');
 }
 
+function getIconByName(name) {
+  if (!name) return '♻️';
+  const n = name.toLowerCase();
+  if (n.includes('กระดาษ')||n.includes('paper')||n.includes('หนังสือ')) return '📦';
+  if (n.includes('พลาสติก')||n.includes('plastic')||n.includes('pet')||n.includes('ถุง')) return '🥤';
+  if (n.includes('แก้ว')||n.includes('glass')||n.includes('เบียร์')) return '🫙';
+  if (n.includes('เหล็ก')||n.includes('metal')||n.includes('สังกะสี')) return '🔩';
+  if (n.includes('อลูมิเนียม')||n.includes('aluminum')||n.includes('กระป๋อง')) return '🥫';
+  if (n.includes('อิเล็ก')||n.includes('ewaste')||n.includes('electronic')) return '📱';
+  return '♻️';
+}
+
 function getDriveImgUrl(url) {
   if (!url) return '';
   const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
@@ -843,8 +855,10 @@ function getDriveImgUrl(url) {
 }
 
 function buildLogItem(r, showPhoto) {
-  const wt=WASTE_TYPES.find(t=>t.id===r.waste_type);
-  const icon=wt?wt.icon:'♻️';
+  const wt = WASTE_TYPES.find(t=>t.id===r.waste_type)
+           || WASTE_TYPES.find(t=>t.name===r.waste_name)
+           || WASTE_TYPES.find(t=>r.waste_name && r.waste_name.includes(t.name.split('/')[0]));
+  const icon = wt ? wt.icon : getIconByName(r.waste_name||r.waste_type);
   let dateStr=r.date_th||'';
   if (dateStr && dateStr.includes('T')) {
     try { dateStr=new Date(dateStr).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}); } catch(e){}
@@ -1007,13 +1021,28 @@ const CHART_COLORS = ['#2e9e64','#0ea5e9','#f59e0b','#a855f7','#ef4444','#f97316
 function renderWasteCharts(filtered) {
   if (!filtered) filtered = records;
 
-  // รวมข้อมูลแต่ละชนิด
+  // รวมข้อมูลแต่ละชนิด — รองรับทั้ง id ใหม่และเก่า
   const byType = {};
   WASTE_TYPES.forEach(w => { byType[w.id] = { name:w.name, icon:w.icon, weight:0, co2:0 }; });
+
+  // mapping id เก่า → id ใหม่
+  const OLD_ID_MAP = {
+    'paper':'paper_mix', 'plastic':'plastic', 'glass':'glass_mix',
+    'metal':'metal_mix', 'aluminum':'aluminum', 'ewaste':'ewaste'
+  };
+
   filtered.forEach(r => {
-    if (byType[r.waste_type]) {
-      byType[r.waste_type].weight += parseFloat(r.weight_kg)||0;
-      byType[r.waste_type].co2   += parseFloat(r.co2e_kg)||0;
+    let typeId = r.waste_type;
+    // ถ้า id เก่าให้ map ไปใหม่
+    if (!byType[typeId] && OLD_ID_MAP[typeId]) typeId = OLD_ID_MAP[typeId];
+    // ถ้ายังไม่เจอลองหาจากชื่อ
+    if (!byType[typeId]) {
+      const found = WASTE_TYPES.find(t=>t.name===r.waste_name);
+      if (found) typeId = found.id;
+    }
+    if (byType[typeId]) {
+      byType[typeId].weight += parseFloat(r.weight_kg)||0;
+      byType[typeId].co2   += parseFloat(r.co2e_kg)||0;
     }
   });
 
