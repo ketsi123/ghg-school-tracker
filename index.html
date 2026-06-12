@@ -1303,7 +1303,7 @@ function renderWasteCharts(filtered) {
 
   const data = WASTE_TYPES.map((w,i) => ({
     ...byType[w.id], color: getWasteColor(w), id: w.id
-  })).filter(d => d.weight > 0);
+  })).filter(d => d.weight > 0).sort((a,b) => b.co2 - a.co2);
 
   if (!data.length) {
     document.getElementById('donutLegend').innerHTML = '<p style="font-size:13px;color:var(--muted);">ยังไม่มีข้อมูล</p>';
