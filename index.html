@@ -925,6 +925,7 @@ function renderHistory(page) {
 
   const totalCO2 = filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
   const totalW   = filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
+  const totalSale = filtered.reduce((s,r)=>s+(parseFloat(r.sale_value)||0),0);
   const totalPages = Math.ceil(filtered.length / HIST_PAGE_SIZE);
   if (histCurrentPage > totalPages) histCurrentPage = totalPages;
 
@@ -934,7 +935,9 @@ function renderHistory(page) {
   summary.innerHTML = '<div class="summary-box">'+
     '<span>รวม <b>'+filtered.length+'</b> รายการ</span>'+
     '<span>น้ำหนัก <b>'+totalW.toFixed(2)+' kg</b></span>'+
-    '<span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span></div>';
+    '<span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span>'+
+    (totalSale>0 ? '<span>มูลค่า <b>฿'+totalSale.toLocaleString()+'</b></span>' : '')+
+    '</div>';
 
   list.innerHTML = pageItems.map(r=>buildLogItem(r,true)).join('');
 
