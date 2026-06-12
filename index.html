@@ -401,7 +401,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     </div>
     <div class="card">
       <div class="section-title" style="justify-content:space-between;">
-        <span><i class="ti ti-chart-bar"></i> น้ำหนักขยะแต่ละชนิด (kg)</span>
+        <span><i class="ti ti-chart-bar"></i> น้ำหนักขยะแต่ละชนิด (kg) <span id="totalWeightBadge" style="font-size:11px;background:var(--g100);color:var(--g600);border-radius:20px;padding:2px 8px;font-weight:700;margin-left:4px;"></span></span>
         <button onclick="toggleBarExpand()" id="barExpandBtn" style="background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:4px 8px;font-family:'Kanit',sans-serif;font-size:11px;color:var(--g600);cursor:pointer;display:flex;align-items:center;gap:4px;">
           <i class="ti ti-arrows-maximize" style="font-size:14px;"></i>ขยาย
         </button>
@@ -411,7 +411,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
 
     <div class="card">
       <div class="section-title" style="justify-content:space-between;">
-        <span><i class="ti ti-cash"></i> มูลค่าการขาย (บาท)</span>
+        <span><i class="ti ti-cash"></i> มูลค่าการขาย (บาท) <span id="totalSaleBadge" style="font-size:11px;background:#fef3c7;color:#92400e;border-radius:20px;padding:2px 8px;font-weight:700;margin-left:4px;"></span></span>
         <button onclick="toggleSaleExpand()" id="saleExpandBtn" style="background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:4px 8px;font-family:'Kanit',sans-serif;font-size:11px;color:var(--g600);cursor:pointer;display:flex;align-items:center;gap:4px;">
           <i class="ti ti-arrows-maximize" style="font-size:14px;"></i>ขยาย
         </button>
@@ -1351,6 +1351,9 @@ function drawSaleBars(filtered) {
     '</div>';
   }).join('');
   el.innerHTML='<div class="waste-bar-wrap-scroll">'+rows+'</div>';
+  const totalS = data.reduce((s,d)=>s+d.sale,0);
+  const sb = document.getElementById('totalSaleBadge');
+  if (sb) sb.textContent = '฿'+totalS.toLocaleString();
 }
 function toggleSaleExpand() {
   const modal=document.getElementById('saleExpandModal'); if(!modal) return;
@@ -1375,6 +1378,9 @@ let _lastBarData = [];
 function drawWasteBars(data) {
   const sorted = [...data].sort((a,b) => b.weight - a.weight);
   _lastBarData = sorted;
+  const totalW = sorted.reduce((s,d)=>s+d.weight,0);
+  const wb = document.getElementById('totalWeightBadge');
+  if (wb) wb.textContent = totalW.toFixed(1)+' kg';
   const maxW = Math.max(...sorted.map(d=>d.weight), 0.1);
   const rows = sorted.map(d => {
     const pct = Math.min(Math.max(Math.round((d.weight/maxW)*100), 3), 100);
