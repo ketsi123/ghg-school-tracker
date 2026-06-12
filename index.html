@@ -58,11 +58,15 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 /* WASTE */
 .waste-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
 .waste-bar-label { font-size:11px; color:var(--text); width:80px; flex-shrink:0; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-.waste-bar-track { flex:1; background:var(--g50); border-radius:20px; height:16px; overflow:hidden; }
-.waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; }
+.waste-bar-wrap-scroll { max-height:280px; overflow-y:auto; padding-right:4px; }
+.waste-bar-wrap-scroll::-webkit-scrollbar { width:4px; }
+.waste-bar-wrap-scroll::-webkit-scrollbar-track { background:var(--g50); border-radius:4px; }
+.waste-bar-wrap-scroll::-webkit-scrollbar-thumb { background:var(--g200); border-radius:4px; }
+.waste-bar-track { flex:1; background:#e5e7eb; border-radius:20px; height:18px; overflow:visible; position:relative; }
+.waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; min-width:6px; }
 .waste-bar-val { font-size:11px; font-weight:700; color:var(--muted); width:44px; text-align:right; flex-shrink:0; }
 .donut-legend-item { display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12px; color:var(--text); }
-.donut-legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.donut-legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
 .donut-legend-pct { font-size:11px; color:var(--muted); margin-left:auto; font-weight:600; }
 
 .waste-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
@@ -1016,7 +1020,22 @@ async function gasPost(data) {
 
 // ── UI ──
 // ── WASTE TYPE CHARTS ──
-const CHART_COLORS = ['#2e9e64','#0ea5e9','#f59e0b','#a855f7','#ef4444','#f97316'];
+// สีตามหมวดหมู่ — ทุก entry ในกลุ่มเดียวกันใช้เฉดสีเดียวกัน
+const GROUP_COLORS = {
+  'กระดาษ':    ['#92400e','#b45309','#d97706'],
+  'พลาสติก':   ['#1d4ed8','#2563eb','#3b82f6','#60a5fa'],
+  'แก้ว':      ['#0369a1','#0284c7','#0ea5e9','#38bdf8'],
+  'เหล็ก':     ['#374151','#4b5563','#6b7280'],
+  'อลูมิเนียม':['#7c3aed','#8b5cf6','#a78bfa'],
+  'อื่นๆ':     ['#059669'],
+};
+function getWasteColor(w) {
+  const grp = w.group || 'อื่นๆ';
+  const colors = GROUP_COLORS[grp] || ['#6b7280'];
+  const groupItems = WASTE_TYPES.filter(t=>t.group===grp);
+  const idx = groupItems.findIndex(t=>t.id===w.id);
+  return colors[Math.max(idx,0) % colors.length];
+}
 
 function renderWasteCharts(filtered) {
   if (!filtered) filtered = records;
@@ -1047,7 +1066,7 @@ function renderWasteCharts(filtered) {
   });
 
   const data = WASTE_TYPES.map((w,i) => ({
-    ...byType[w.id], color: CHART_COLORS[i], id: w.id
+    ...byType[w.id], color: getWasteColor(w), id: w.id
   })).filter(d => d.weight > 0);
 
   if (!data.length) {
@@ -1108,14 +1127,17 @@ function drawDonut(data) {
 
 function drawWasteBars(data) {
   const maxW = Math.max(...data.map(d=>d.weight), 0.1);
-  document.getElementById('wasteBarChart').innerHTML = data.map((d,i) => {
-    const pct = Math.round((d.weight/maxW)*100);
+  const rows = data.map(d => {
+    const pct = Math.max(Math.round((d.weight/maxW)*100), 3);
+    const color = d.color || '#6b7280';
     return '<div class="waste-bar-row">'+
-      '<div class="waste-bar-label">'+d.icon+' '+d.name+'</div>'+
-      '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+d.color+'"></div></div>'+
+      '<div class="waste-bar-label"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+color+';flex-shrink:0;margin-right:2px;"></span>'+d.icon+' '+d.name+'</div>'+
+      '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
       '<div class="waste-bar-val">'+d.weight.toFixed(1)+' kg</div>'+
     '</div>';
   }).join('');
+  document.getElementById('wasteBarChart').innerHTML =
+    '<div class="waste-bar-wrap-scroll">'+rows+'</div>';
 }
 
 function buildWasteGrid() {
