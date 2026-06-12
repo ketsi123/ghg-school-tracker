@@ -56,15 +56,15 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .stat-value { font-size:22px; font-weight:800; color:var(--text); line-height:1; }
 .stat-unit { font-size:11px; color:var(--muted); }
 /* WASTE */
-.waste-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.waste-bar-label { font-size:11px; color:var(--text); width:110px; min-width:110px; flex-shrink:0; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-.waste-bar-wrap-scroll { max-height:160px; overflow-y:scroll; overflow-x:hidden; padding-right:6px; }
+.waste-bar-row { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+.waste-bar-label { font-size:11px; color:var(--text); width:100%; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.waste-bar-inline { display:flex; align-items:center; gap:6px; width:100%; }.waste-bar-wrap-scroll { max-height:160px; overflow-y:scroll; overflow-x:hidden; padding-right:6px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar { width:4px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar-track { background:var(--g50); border-radius:4px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar-thumb { background:var(--g200); border-radius:4px; }
 .waste-bar-track { flex:1; min-width:0; background:#e5e7eb; border-radius:20px; height:14px; overflow:hidden; }
 .waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; min-width:4px; max-width:100%; }
-.waste-bar-val { font-size:11px; font-weight:700; color:var(--muted); width:44px; text-align:right; flex-shrink:0; }
+.waste-bar-val { font-size:11px; font-weight:700; color:var(--text); min-width:52px; width:52px; text-align:right; flex-shrink:0; white-space:nowrap; }
 .donut-legend-item { display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12px; color:var(--text); }
 .donut-legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
 .donut-legend-pct { font-size:11px; color:var(--muted); margin-left:auto; font-weight:600; }
@@ -1446,8 +1446,10 @@ function drawSaleBars(filtered) {
     const pct=Math.min(Math.max(Math.round((d.sale/maxS)*100),3),100);
     return '<div class="waste-bar-row">'+
       '<div class="waste-bar-label"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+d.color+';flex-shrink:0;"></span>'+d.icon+' '+d.name+'</div>'+
-      '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+d.color+';"></div></div>'+
-      '<div class="waste-bar-val" style="width:60px;">฿'+d.sale.toLocaleString()+'</div>'+
+      '<div class="waste-bar-inline">'+
+        '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+d.color+';"></div></div>'+
+        '<div class="waste-bar-val">฿'+d.sale.toLocaleString()+'</div>'+
+      '</div>'+
     '</div>';
   }).join('');
   el.innerHTML='<div class="waste-bar-wrap-scroll">'+rows+'</div>';
@@ -1508,10 +1510,10 @@ function drawWasteBars(data) {
         '<span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+color+';flex-shrink:0;"></span>'+
         d.icon+' '+d.name+
       '</div>'+
-      '<div class="waste-bar-track">'+
-        '<div class="waste-bar-fill" style="width:'+pct+'%;background:'+color+';"></div>'+
+      '<div class="waste-bar-inline">'+
+        '<div class="waste-bar-track"><div class="waste-bar-fill" style="width:'+pct+'%;background:'+color+';"></div></div>'+
+        '<div class="waste-bar-val">'+d.weight.toFixed(1)+' kg</div>'+
       '</div>'+
-      '<div class="waste-bar-val">'+d.weight.toFixed(1)+' kg</div>'+
     '</div>';
   }).join('');
   document.getElementById('wasteBarChart').innerHTML =
