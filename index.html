@@ -57,13 +57,13 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .stat-unit { font-size:11px; color:var(--muted); }
 /* WASTE */
 .waste-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.waste-bar-label { font-size:11px; color:var(--text); width:80px; flex-shrink:0; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.waste-bar-label { font-size:11px; color:var(--text); width:100px; flex-shrink:0; display:flex; align-items:center; gap:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .waste-bar-wrap-scroll { max-height:280px; overflow-y:auto; padding-right:4px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar { width:4px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar-track { background:var(--g50); border-radius:4px; }
 .waste-bar-wrap-scroll::-webkit-scrollbar-thumb { background:var(--g200); border-radius:4px; }
-.waste-bar-track { flex:1; background:#e5e7eb; border-radius:20px; height:18px; overflow:visible; position:relative; }
-.waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; min-width:6px; }
+.waste-bar-track { flex:1; background:#e5e7eb; border-radius:20px; height:14px; overflow:hidden; }
+.waste-bar-fill { height:100%; border-radius:20px; transition:width .5s ease; min-width:6px; max-width:100%; }
 .waste-bar-val { font-size:11px; font-weight:700; color:var(--muted); width:44px; text-align:right; flex-shrink:0; }
 .donut-legend-item { display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12px; color:var(--text); }
 .donut-legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
@@ -164,6 +164,17 @@ select:focus { border-color:var(--g500); }
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMUkJClc3_EVw6tw3dw2bFsGqrn9OwUMtO_GSHjuzntdxAT7A/exec";
 </script>
+
+<!-- BAR EXPAND MODAL -->
+<div class="modal-overlay" id="barExpandModal" onclick="if(event.target===this)closeBarModal()" style="align-items:center;">
+  <div style="background:#fff;border-radius:20px;padding:1.5rem;width:92%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span style="font-size:16px;font-weight:700;color:var(--text);"><i class="ti ti-chart-bar" style="color:var(--g500);"></i> น้ำหนักขยะแต่ละชนิด (kg)</span>
+      <button onclick="closeBarModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    </div>
+    <div id="barModalContent"></div>
+  </div>
+</div>
 
 <!-- EDIT MODAL -->
 <div id="editModal" class="modal-overlay" onclick="if(event.target===this)closeEditModal()">
@@ -1185,16 +1196,28 @@ function drawWasteBars(data) {
 
 let _barExpanded = false;
 function toggleBarExpand() {
-  _barExpanded = !_barExpanded;
-  const btn = document.getElementById('barExpandBtn');
-  const wrap = document.querySelector('#wasteBarChart .waste-bar-wrap-scroll');
-  if (_barExpanded) {
-    if (wrap) wrap.style.maxHeight = 'none';
-    btn.innerHTML = '<i class="ti ti-arrows-minimize" style="font-size:14px;"></i>ย่อ';
-  } else {
-    if (wrap) wrap.style.maxHeight = '280px';
-    btn.innerHTML = '<i class="ti ti-arrows-maximize" style="font-size:14px;"></i>ขยาย';
-  }
+  // เปิด modal แสดงกราฟเต็ม
+  const modal = document.getElementById('barExpandModal');
+  if (!modal) return;
+  const maxW = Math.max(..._lastBarData.map(d=>d.weight), 0.1);
+  const rows = _lastBarData.map(d => {
+    const pct = Math.max(Math.round((d.weight/maxW)*100), 3);
+    const color = d.color || '#6b7280';
+    return '<div class="waste-bar-row" style="margin-bottom:12px;">'+
+      '<div style="font-size:12px;color:var(--text);width:130px;flex-shrink:0;display:flex;align-items:center;gap:5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">'+
+        '<span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:'+color+';flex-shrink:0;"></span>'+
+        d.icon+' '+d.name+'</div>'+
+      '<div style="flex:1;background:#e5e7eb;border-radius:20px;height:20px;overflow:hidden;">'+
+        '<div style="width:'+pct+'%;height:100%;border-radius:20px;background:'+color+';min-width:8px;"></div>'+
+      '</div>'+
+      '<div style="font-size:13px;font-weight:700;color:'+color+';width:52px;text-align:right;flex-shrink:0;">'+d.weight.toFixed(1)+' kg</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('barModalContent').innerHTML = rows;
+  modal.classList.add('open');
+}
+function closeBarModal() {
+  document.getElementById('barExpandModal').classList.remove('open');
 }
 
 function buildWasteGrid() {
