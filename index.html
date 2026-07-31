@@ -274,8 +274,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     <div style="margin-bottom:16px;">
       <span class="login-label">รหัสโรงเรียน 10 หลัก</span>
       <div class="login-row">
-        <input class="login-input" type="text" id="schoolCodeInput" placeholder="เช่น 1234567890" maxlength="10" inputmode="numeric" autocomplete="off" pattern="[0-9]{10}"
-               oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"
+        <input class="login-input" type="text" id="schoolCodeInput" placeholder="เช่น 1234567890" maxlength="10" inputmode="numeric" autocomplete="off"
+               oninput="this.value=this.value.replace(/[^0-9]/g, '');"
                onkeydown="if(event.key==='Enter') doLogin()">
         <button class="btn-primary" onclick="doLogin()" id="loginBtn">
           <i class="ti ti-login"></i>เข้าสู่ระบบ
