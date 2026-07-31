@@ -22,10 +22,10 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .header-top { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
 .header-title-wrap { min-width:0; }
 .header-brand-row { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-.header-partner-logo { display:flex; align-items:center; flex:0 1 205px; min-width:110px; max-width:205px; }
-.header-partner-logo img { display:block; width:100%; height:auto; max-height:44px; object-fit:contain; object-position:left center; background:transparent; }
+.header-partner-logo {margin-left:auto; justify-content:flex-end; max-width:170px; }
+.header-partner-logo img {max-height:36px; object-fit:contain; object-position:left center; background:transparent; }
 .header-bottom { position:relative; z-index:1; display:flex; align-items:flex-end; justify-content:space-between; gap:10px; margin-top:14px; }
-.header-logout { border:1px solid rgba(255,255,255,.58); background:rgba(255,255,255,.15); color:#fff; border-radius:10px; padding:8px 11px; font-family:'Kanit',sans-serif; font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; flex-shrink:0; }
+.header-logout {padding:6px 10px;font-size:11px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; flex-shrink:0; }
 .header-logout:active { transform:scale(.98); }
 .login-row { display:flex; gap:8px; align-items:stretch; }
 .login-row .login-input { flex:1; min-width:0; }
@@ -43,10 +43,10 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
   .header-title-wrap { flex:0 0 auto; }
   .header h1 { font-size:15px; }
   .header p { font-size:10px; }
-  .header-partner-logo { flex:1 1 125px; min-width:95px; max-width:155px; }
-  .header-partner-logo img { max-height:38px; }
+  .header-partner-logo { flex:1 1 125px; min-width:95px; max-width:145px; }
+  .header-partner-logo img { max-height:32px; }
   .header-bottom { margin-top:12px; }
-  .header-logout { padding:7px 9px; font-size:11px; }
+  .header-logout { padding:5px 8px; font-size:10px; }
 }
 @media (max-width:350px) {
   .header-partner-logo { max-width:125px; }
