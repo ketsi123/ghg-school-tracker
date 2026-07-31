@@ -274,10 +274,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
     <div style="margin-bottom:16px;">
       <span class="login-label">รหัสโรงเรียน 10 หลัก</span>
       <div class="login-row">
-        <input class="login-input" type="text" id="schoolCodeInput" placeholder="เช่น 1234567890" maxlength="10" inputmode="numeric" autocomplete="off"
-               oninput="this.value=this.value.replace(/[^0-9]/g, '');"
-               onkeydown="if(event.key==='Enter') doLogin()">
-        <button class="btn-primary" onclick="doLogin()" id="loginBtn">
+        <input class="login-input" type="tel" id="schoolCodeInput" name="schoolCode" placeholder="เช่น 1234567890" maxlength="10" inputmode="numeric" autocomplete="off" aria-label="รหัสโรงเรียน 10 หลัก" style="position:relative;z-index:2;pointer-events:auto;user-select:text;-webkit-user-select:text;">
+        <button type="button" class="btn-primary" onclick="doLogin()" id="loginBtn">
           <i class="ti ti-login"></i>เข้าสู่ระบบ
         </button>
       </div>
@@ -575,6 +573,7 @@ const WASTE_TYPES = [
 let records=[], selectedWaste=null, currentSchool=null, uploadedPhotoUrls=[];
 
 window.onload = function() {
+  setupSchoolCodeInput();
   const saved = localStorage.getItem('ghg_school');
   if (saved) { currentSchool = JSON.parse(saved); startApp(); }
   buildWasteGrid(); buildFactorTable();
@@ -711,6 +710,34 @@ async function adminDeleteSchool(code, name) {
     }
   } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
 }
+
+// ── LOGIN INPUT ──
+function setupSchoolCodeInput() {
+  const input = document.getElementById('schoolCodeInput');
+  if (!input || input.dataset.ready === '1') return;
+  input.dataset.ready = '1';
+  input.disabled = false;
+  input.readOnly = false;
+  input.removeAttribute('readonly');
+  input.removeAttribute('disabled');
+
+  input.addEventListener('input', function () {
+    const cleaned = String(this.value || '').replace(/[^0-9]/g, '').slice(0, 10);
+    if (this.value !== cleaned) this.value = cleaned;
+    const errorBox = document.getElementById('loginError');
+    if (errorBox) errorBox.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      doLogin();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setupSchoolCodeInput);
+setTimeout(setupSchoolCodeInput, 0);
 
 // ── LOGIN ──
 async function doLogin() {
