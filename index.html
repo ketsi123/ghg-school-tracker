@@ -19,7 +19,15 @@ body { font-family:'Kanit',sans-serif; background:var(--bg); }
 .app { max-width:480px; margin:0 auto; min-height:100vh; }
 .header { background:linear-gradient(135deg,#1f7a4c,#2e9e64 50%,#3db878); padding:1rem 1.25rem 1.5rem; color:#fff; position:relative; overflow:hidden; }
 .header::before { content:''; position:absolute; top:-30px; right:-30px; width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.08); }
-.header-top { display:flex; align-items:center; gap:10px; }
+.header-top { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
+.header-title-wrap { flex:1; min-width:0; }
+.header-logout { margin-left:auto; border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.16); color:#fff; border-radius:10px; padding:8px 10px; font-family:'Kanit',sans-serif; font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; flex-shrink:0; }
+.header-logout:active { transform:scale(.98); }
+.login-row { display:flex; gap:8px; align-items:stretch; }
+.login-row .login-input { flex:1; min-width:0; }
+.login-row .btn-primary { width:auto; min-width:108px; padding:12px 14px; white-space:nowrap; }
+.project-name { font-size:12px; color:var(--g600); font-weight:700; margin-top:6px; }
+@media (max-width:380px) { .login-row { flex-direction:column; } .login-row .btn-primary { width:100%; } .header-logout span { display:none; } .header-logout { padding:8px; } }
 .logo-circle { width:42px; height:42px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
 .header h1 { font-size:17px; font-weight:700; line-height:1.2; }
 .header p { font-size:12px; opacity:.85; }
@@ -261,17 +269,20 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       <span class="emoji">🌿</span>
       <h1>GHG School Tracker</h1>
       <p>บันทึกขยะ คำนวณก๊าซเรือนกระจก</p>
+      <div class="project-name">Green Heart Hero by CPF</div>
     </div>
     <div style="margin-bottom:16px;">
-      <span class="login-label">รหัสโรงเรียน (School Code)</span>
-      <input class="login-input" type="text" id="schoolCodeInput" placeholder="เช่น SCH001" maxlength="20"
-             oninput="this.value=this.value.toUpperCase()"
-             onkeydown="if(event.key==='Enter') doLogin()">
+      <span class="login-label">รหัสโรงเรียน 10 หลัก</span>
+      <div class="login-row">
+        <input class="login-input" type="text" id="schoolCodeInput" placeholder="เช่น 1234567890" maxlength="10" inputmode="numeric" autocomplete="off" pattern="[0-9]{10}"
+               oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"
+               onkeydown="if(event.key==='Enter') doLogin()">
+        <button class="btn-primary" onclick="doLogin()" id="loginBtn">
+          <i class="ti ti-login"></i>เข้าสู่ระบบ
+        </button>
+      </div>
       <div class="login-error" id="loginError">รหัสโรงเรียนไม่ถูกต้อง</div>
     </div>
-    <button class="btn-primary" onclick="doLogin()" id="loginBtn">
-      <i class="ti ti-login"></i>เข้าสู่ระบบ
-    </button>
     <button onclick="openAdminLogin()" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:12px;background:none;font-family:'Kanit',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
       <i class="ti ti-settings" style="font-size:16px;"></i>จัดการโรงเรียน (Admin)
     </button>
@@ -338,7 +349,10 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
   <div class="header">
     <div class="header-top">
       <div class="logo-circle">🌿</div>
-      <div><h1>GHG School Tracker</h1><p>บันทึกขยะ คำนวณก๊าซเรือนกระจก</p></div>
+      <div class="header-title-wrap"><h1>GHG School Tracker</h1><p>บันทึกขยะ คำนวณก๊าซเรือนกระจก</p></div>
+      <button class="header-logout" onclick="doLogout()" aria-label="ออกจากระบบ">
+        <i class="ti ti-logout" style="font-size:17px;"></i><span>ออกจากระบบ</span>
+      </button>
     </div>
     <div class="school-badge">
       <i class="ti ti-school" style="font-size:14px;"></i>
@@ -700,8 +714,15 @@ async function adminDeleteSchool(code, name) {
 
 // ── LOGIN ──
 async function doLogin() {
-  const code = document.getElementById('schoolCodeInput').value.trim().toUpperCase();
-  if (!code) return;
+  const code = document.getElementById('schoolCodeInput').value.trim();
+  const errorBox = document.getElementById('loginError');
+  if (!/^\d{10}$/.test(code)) {
+    errorBox.textContent = 'กรุณากรอกรหัสโรงเรียน 10 หลัก';
+    errorBox.classList.add('show');
+    document.getElementById('schoolCodeInput').focus();
+    return;
+  }
+  errorBox.classList.remove('show');
   const btn = document.getElementById('loginBtn');
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังตรวจสอบ...';
   try {
