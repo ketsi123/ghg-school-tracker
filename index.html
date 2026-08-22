@@ -281,6 +281,80 @@ select:focus { border-color:var(--g500); }
 .upload-progress { background:var(--g50); border-radius:10px; padding:10px 12px; margin-top:8px; font-size:12px; color:var(--g600); display:none; align-items:center; gap:8px; }
 .upload-progress.show { display:flex; }
 @media (min-width:640px) { .waste-grid { grid-template-columns:repeat(4,1fr); } }
+
+/* ===== WasteBuy 7-group selector redesign ===== */
+.waste-search-wrap{position:relative;margin-bottom:14px}
+.waste-search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:0 12px;box-shadow:0 3px 12px rgba(31,122,76,.06);transition:.2s}
+.waste-search-box:focus-within{border-color:var(--g500);box-shadow:0 0 0 3px rgba(46,158,100,.10)}
+.waste-search-box i{font-size:21px;color:var(--g500);flex-shrink:0}
+#wasteSearchInput{border:none!important;background:transparent!important;padding:12px 0!important;font-size:14px!important;box-shadow:none!important;outline:none!important;flex:1;min-width:0}
+.waste-search-clear{border:none;background:transparent;color:var(--muted);font-size:19px;cursor:pointer;padding:4px;display:none}
+.waste-search-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 16px 38px rgba(18,66,43,.16);max-height:300px;overflow:auto;padding:6px}
+.waste-search-results.show{display:block}
+.waste-search-item{width:100%;border:none;background:#fff;border-radius:10px;padding:9px 10px;display:flex;align-items:center;gap:9px;text-align:left;cursor:pointer;font-family:'Kanit',sans-serif}
+.waste-search-item:hover,.waste-search-item:active{background:var(--g50)}
+.waste-search-item .sicon{font-size:23px;width:28px;text-align:center;flex-shrink:0}
+.waste-search-item .stxt{min-width:0;flex:1}
+.waste-search-item .sname{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.waste-search-item .smeta{font-size:10px;color:var(--muted);margin-top:1px}
+.waste-search-empty{padding:16px;text-align:center;color:var(--muted);font-size:12px}
+.waste-search-hint{font-size:10px;color:var(--muted);margin:5px 2px 0}
+
+.waste-group-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.waste-group-btn{border:1.5px solid transparent;border-radius:14px;padding:10px 4px 9px;background:var(--bg);font-family:'Kanit',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:86px;transition:.18s}
+.waste-group-btn .gicon{font-size:30px;line-height:1}
+.waste-group-btn .gname{font-size:10.5px;font-weight:700;color:var(--text);text-align:center;line-height:1.2}
+.waste-group-btn .gcount{font-size:9px;color:var(--muted)}
+.waste-group-btn.active{border-color:var(--g500);background:var(--g50);box-shadow:0 3px 10px rgba(46,158,100,.12);transform:translateY(-1px)}
+
+.waste-sub-panel{display:none;margin-top:12px;padding:12px;background:linear-gradient(180deg,#fbfefc,#f5fbf7);border:1px solid var(--border);border-radius:14px}
+.waste-sub-panel.show{display:block}
+.waste-sub-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.waste-sub-head .gicon{font-size:23px}
+.waste-sub-head .title{font-size:13px;font-weight:700;color:var(--text)}
+.waste-sub-head .count{font-size:10px;color:var(--muted);margin-left:auto}
+#wasteSubtypeSelect{background:#fff;font-size:13px;padding:11px 12px}
+
+.waste-selected-card{display:none;margin-top:12px;border:1.5px solid var(--g200);background:linear-gradient(135deg,#f7fff9,#effaf3);border-radius:14px;padding:11px 12px}
+.waste-selected-card.show{display:block}
+.waste-selected-main{display:flex;align-items:center;gap:10px}
+.waste-selected-icon{width:42px;height:42px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 2px 8px rgba(0,0,0,.04);flex-shrink:0}
+.waste-selected-text{min-width:0;flex:1}
+.waste-selected-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.25}
+.waste-selected-group{font-size:10px;color:var(--g600);font-weight:600;margin-top:2px}
+.waste-selected-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.waste-meta-chip{background:#fff;border-radius:9px;padding:7px 8px;min-width:0}
+.waste-meta-label{font-size:9px;color:var(--muted)}
+.waste-meta-value{font-size:11px;font-weight:700;color:var(--text);margin-top:1px;word-break:break-word}
+.waste-factor-note{margin-top:8px;font-size:10px;line-height:1.45;color:#8a5a00;background:#fff8df;border-radius:8px;padding:6px 8px;display:none}
+.waste-factor-note.show{display:block}
+@media(max-width:380px){.waste-group-grid{grid-template-columns:repeat(3,1fr)}.waste-group-btn{min-height:82px}.waste-selected-meta{grid-template-columns:1fr}}
+
+
+/* ===== Multi-item sale cart ===== */
+.cart-add-row{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:8px;align-items:end;margin-top:12px}
+.cart-weight-wrap label{font-size:11px;margin-bottom:4px}
+.cart-add-btn{height:43px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--g500),var(--g600));color:#fff;font-family:'Kanit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 10px rgba(46,158,100,.22)}
+.cart-add-btn:active{transform:scale(.98)}
+.sale-cart-card{display:none}.sale-cart-card.show{display:block}
+.sale-cart-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sale-cart-title{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;color:var(--text)}
+.sale-cart-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:20px;background:var(--g100);color:var(--g700);font-size:11px;font-weight:800;padding:0 8px}
+.sale-cart-empty{padding:22px 12px;text-align:center;background:var(--bg);border:1px dashed var(--g200);border-radius:13px;color:var(--muted);font-size:12px;line-height:1.55}
+.sale-cart-list{display:flex;flex-direction:column;gap:8px}
+.sale-cart-item{border:1px solid var(--border);background:#fff;border-radius:13px;padding:10px 11px;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:9px;align-items:center}
+.sale-cart-icon{width:38px;height:38px;border-radius:11px;background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:22px}
+.sale-cart-name{font-size:12px;font-weight:800;color:var(--text);line-height:1.25}
+.sale-cart-meta{font-size:10px;color:var(--muted);margin-top:2px}.sale-cart-meta b{color:var(--g600)}
+.sale-cart-actions{display:flex;gap:3px}.sale-cart-action{width:30px;height:30px;border:none;border-radius:9px;background:var(--bg);color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}.sale-cart-action.danger{background:#fef2f2;color:#dc2626}
+.sale-cart-summary{margin-top:10px;background:linear-gradient(135deg,#f3fbf6,#ecf9f1);border:1px solid var(--g100);border-radius:13px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sale-cart-stat .lbl{font-size:9px;color:var(--muted)}.sale-cart-stat .val{font-size:16px;font-weight:800;color:var(--g700);margin-top:1px}.sale-cart-stat.full{grid-column:1/-1;border-top:1px dashed var(--g200);padding-top:8px}
+.batch-note{font-size:10px;color:var(--muted);line-height:1.45;margin-top:7px}
+.common-data-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.save-all-btn .save-count{background:rgba(255,255,255,.18);border-radius:20px;padding:1px 7px;font-size:11px}
+@media(max-width:360px){.cart-add-row{grid-template-columns:1fr}.cart-add-btn{height:42px}.sale-cart-item{grid-template-columns:34px minmax(0,1fr) auto}.sale-cart-icon{width:34px;height:34px;font-size:20px}}
+.required-mark{color:#dc2626;font-weight:800;margin-left:2px}.submit-status{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:10.5px;line-height:1.45;border:1px solid #fed7aa}.submit-status.ready{background:var(--g50);color:var(--g700);border-color:var(--g100)}#saveBtn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none;filter:grayscale(.15)}.required-hint{font-size:9.5px;color:#dc2626;margin-top:4px}
+
 </style>
 </head>
 <body>
@@ -562,55 +636,106 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
   <!-- RECORD -->
   <div id="page-record" class="page">
     <div class="card">
-      <div class="section-title"><i class="ti ti-recycle"></i>เลือกประเภทขยะ</div>
-      <div id="wasteGrid"></div>
+      <div class="section-title"><i class="ti ti-recycle"></i>เพิ่มรายการขยะที่จะขาย</div>
+
+      <div class="waste-search-wrap">
+        <div class="waste-search-box">
+          <i class="ti ti-search"></i>
+          <input type="text" id="wasteSearchInput" placeholder="ค้นหาขยะทุกกลุ่ม เช่น PET, กระป๋อง, ทองแดง..." autocomplete="off" oninput="searchWaste(this.value)" onfocus="searchWaste(this.value)">
+          <button type="button" class="waste-search-clear" id="wasteSearchClear" onclick="clearWasteSearch()" aria-label="ล้างคำค้น">✕</button>
+        </div>
+        <div class="waste-search-results" id="wasteSearchResults"></div>
+        <div class="waste-search-hint">ค้นหาแล้วเลือกได้เลย หรือกด 1 ใน 7 หมวดด้านล่าง</div>
+      </div>
+
+      <div class="waste-group-grid" id="wasteGrid"></div>
+
+      <div class="waste-sub-panel" id="wasteSubPanel">
+        <div class="waste-sub-head">
+          <span class="gicon" id="wasteSubGroupIcon">♻️</span>
+          <span class="title" id="wasteSubGroupTitle">เลือกรายการย่อย</span>
+          <span class="count" id="wasteSubCount"></span>
+        </div>
+        <select id="wasteSubtypeSelect" onchange="onWasteSubtypeChange()" required>
+          <option value="">— เลือกประเภทย่อย —</option>
+        </select>
+      </div>
+
+      <div class="waste-selected-card" id="wasteSelectedCard">
+        <div class="waste-selected-main">
+          <div class="waste-selected-icon" id="selectedWasteIcon">♻️</div>
+          <div class="waste-selected-text">
+            <div class="waste-selected-name" id="selectedWasteName">-</div>
+            <div class="waste-selected-group" id="selectedWasteGroup">-</div>
+          </div>
+        </div>
+        <div class="waste-selected-meta" style="display:none;">
+          <div class="waste-meta-chip" style="grid-column:1/-1;">
+            <div class="waste-meta-label">GHG Reduction Factor ของกลุ่ม (kgCO₂e/kg)</div>
+            <div class="waste-meta-value" id="selectedWasteFactor">-</div>
+          </div>
+        </div>
+        <div class="waste-factor-note" id="selectedFactorNote" style="display:none;"></div>
+
+        <div class="cart-add-row">
+          <div class="cart-weight-wrap">
+            <label>น้ำหนักรายการนี้ (กิโลกรัม) <span class="required-mark">*</span></label>
+            <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1" required onkeydown="if(event.key==='Enter'){event.preventDefault();addCurrentWasteToCart();}">
+          </div>
+          <button type="button" class="cart-add-btn" onclick="addCurrentWasteToCart()"><i class="ti ti-plus"></i> เพิ่มรายการ</button>
+        </div>
+
+        <div class="result-box" id="calcResult" style="display:none!important;">
+          <div class="result-row"><span class="result-label">ประมาณการ GHG รายการนี้</span><span class="result-val" id="rCO2">0.00 kg CO₂e</span></div>
+          <div class="result-sub" id="rCo2Note" style="text-align:left;">คำนวณจาก Factor ของกลุ่ม</div>
+          <span id="rType" style="display:none"></span><span id="rWeight" style="display:none"></span><span id="rFactor" style="display:none"></span><span id="rTree" style="display:none"></span>
+        </div>
+      </div>
     </div>
-    <div class="card">
+
+    <div class="card sale-cart-card" id="saleCartCard">
+      <div class="sale-cart-head">
+        <div class="sale-cart-title"><i class="ti ti-shopping-cart" style="color:var(--g500);font-size:20px;"></i> รายการที่จะขาย <span class="sale-cart-count" id="saleCartCount">0</span></div>
+        <button type="button" onclick="clearSaleCart()" style="border:none;background:none;color:#dc2626;font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;">ล้างทั้งหมด</button>
+      </div>
+      <div id="saleCartList" class="sale-cart-list"></div>
+      <div class="sale-cart-summary" id="saleCartSummary"></div>
+      <div class="batch-note">เพิ่มได้หลายชนิดในครั้งเดียว เช่น กระดาษ → เหล็ก → ขวด PET แล้วค่อยกรอกข้อมูลการขายด้านล่างเพียงครั้งเดียว</div>
+    </div>
+
+    <div class="card" id="commonSaleCard">
+      <div class="common-data-title"><i class="ti ti-clipboard-check" style="color:var(--g500);font-size:18px;"></i> ข้อมูลการขายครั้งนี้ <span style="font-size:10px;font-weight:500;color:var(--muted);">กรอกครั้งเดียว</span></div>
       <div style="margin-bottom:12px;">
-        <label>น้ำหนัก (กิโลกรัม)</label>
-        <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1">
+        <label>มูลค่าการขายรวม (บาท) <span class="required-mark">*</span></label>
+        <input type="number" id="saleValueInput" placeholder="เช่น 350" min="0.01" step="0.01" required>
       </div>
       <div style="margin-bottom:12px;">
-        <label>มูลค่าการขาย (บาท)</label>
-        <input type="number" id="saleValueInput" placeholder="เช่น 150" min="0" step="0.01">
-      </div>
-      <div style="margin-bottom:12px;">
-        <label>ชื่อผู้บันทึก</label>
-        <input type="text" id="recorderInput" placeholder="เช่น ครูสมชาย">
+        <label>ชื่อผู้บันทึก <span class="required-mark">*</span></label>
+        <input type="text" id="recorderInput" required placeholder="เช่น ครูสมชาย">
       </div>
       <div style="margin-bottom:14px;">
-        <label>วันที่บันทึก</label>
-        <input type="date" id="dateInput">
+        <label>วันที่ขาย / วันที่บันทึก <span class="required-mark">*</span></label>
+        <input type="date" id="dateInput" required>
       </div>
       <div style="margin-bottom:14px;">
         <label style="display:flex;align-items:center;gap:6px;">
           <i class="ti ti-camera" style="font-size:16px;color:var(--g500);"></i>
-          รูปถ่าย (เพิ่มได้หลายรูป)
+          รูปถ่ายการขายครั้งนี้ (ใช้ร่วมกันทุกรายการ) <span class="required-mark">*</span>
         </label>
         <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
           <div style="font-size:32px;color:var(--g500);margin-bottom:6px;">📷</div>
-          <p style="font-size:13px;color:var(--muted);">กดเพื่อเลือกหรืออัปโหลดรูป (เลือกได้หลายรูป)</p>
+          <p style="font-size:13px;color:var(--muted);">เพิ่มรูปครั้งเดียว แล้วบันทึกพร้อมขยะทุกชนิดในตะกร้า</p>
         </div>
-        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" style="display:none;">
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" required style="display:none;">
         <div id="photoPreviewList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
         <div class="upload-progress" id="uploadProgress">
           <i class="ti ti-loader-2" style="font-size:16px;"></i> <span id="uploadProgressText">กำลังอัปโหลดรูปภาพ...</span>
         </div>
       </div>
-      <div class="result-box" id="calcResult">
-        <div class="result-row"><span class="result-label">ประเภทขยะ</span><span class="result-val" id="rType">-</span></div>
-        <div class="result-row"><span class="result-label">น้ำหนัก</span><span class="result-val" id="rWeight">-</span></div>
-        <div class="result-row"><span class="result-label">Emission Factor (อบก.)</span><span class="result-val" id="rFactor">-</span></div>
-        <div style="border-top:1px dashed var(--g200);margin:8px 0;"></div>
-        <div class="result-big" id="rCO2">0.00 kg CO₂e</div>
-        <div class="result-sub">ปริมาณก๊าซเรือนกระจกที่ลดได้จากการรีไซเคิล</div>
-        <div class="tree-equiv">
-          <span class="big">🌳</span>
-          <div class="text">เทียบเท่าการปลูกต้นไม้ <span class="val" id="rTree">0</span> ต้น<br><span>ต้นไม้ดูดซับ CO₂ เฉลี่ย 9.5 kg/ปี</span></div>
-        </div>
-      </div>
-      <button class="btn-primary" style="margin-top:12px;" onclick="saveRecord()" id="saveBtn">
-        <i class="ti ti-device-floppy"></i>บันทึกข้อมูล
+      <div class="required-hint">* ต้องกรอก/เลือกข้อมูลให้ครบทุกช่องก่อนบันทึก</div>
+      <div class="submit-status" id="submitStatus">กรุณาเพิ่มรายการขยะและกรอกข้อมูลการขายให้ครบ</div>
+      <button class="btn-primary save-all-btn" style="margin-top:10px;" onclick="saveRecord()" id="saveBtn" disabled>
+        <i class="ti ti-device-floppy"></i>บันทึกทั้งหมด <span class="save-count" id="saveItemCount">0 รายการ</span>
       </button>
     </div>
   </div>
@@ -641,10 +766,10 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
 
   <!-- INFO -->
   <div id="page-info" class="page">
-    <div class="info-chip"><i class="ti ti-bulb"></i><p>ค่า Emission Factor อ้างอิงจาก <b>องค์การบริหารจัดการก๊าซเรือนกระจก (อบก.)</b> ประเทศไทย</p></div>
+    <div class="info-chip"><i class="ti ti-bulb"></i><p><b>ประเภทขยะอ้างอิงตาม WasteBuy Delivery</b> ส่วนตัวเลขที่แสดงคือ <b>GHG Reduction Factor (kgCO₂e/kg)</b> ไม่ใช่ราคาขาย โดยรายการที่ยังไม่มี Factor ที่ยืนยันได้จะแสดง “รอตรวจสอบ” แทนการเดาค่า</p></div>
     <div class="card">
       <div class="section-title"><i class="ti ti-math"></i>สูตรคำนวณ (อบก.)</div>
-      <div style="background:var(--g50);border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;line-height:1.9;color:var(--g700);"><b>CO₂e (kg) = น้ำหนักขยะ (kg) × Emission Factor</b><br>ต้นไม้เทียบเท่า = CO₂e รวม ÷ 9.5 kg/ปี/ต้น</div>
+      <div style="background:var(--g50);border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;line-height:1.9;color:var(--g700);"><b>GHG ลดได้ (kgCO₂e) = น้ำหนักขยะ (kg) × Reduction Factor</b><br>ต้นไม้เทียบเท่า = GHG ลดได้รวม ÷ 9.5 kg/ปี/ต้น<br><span style="font-size:11px;color:var(--muted);">รายการที่ยังไม่มีวิธี LESS ตรงประเภท จะบันทึกน้ำหนัก/มูลค่าได้ แต่ไม่คำนวณ GHG แทนการเดาค่า</span></div>
       <table class="factor-table"><thead><tr><th>ประเภทขยะ</th><th>Factor (kgCO₂e/kg)</th><th>อ้างอิง</th></tr></thead><tbody id="factorTableBody"></tbody></table>
     </div>
     <div class="card">
@@ -666,46 +791,132 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
 <div class="toast" id="toast"></div>
 
 <script>
+// น้ำมัน: 2.9267 kgCO₂e/kg เป็น international proxy จาก EU RED: (94 - 14.9) gCO₂e/MJ × 37 MJ/kg
+const WASTE_GROUPS = [
+  // Factor ใช้ระดับ "กลุ่มใหญ่" เท่านั้น — รายการย่อยในกลุ่มเดียวกันใช้ค่าเดียวกันทั้งหมด
+  {name:'เศษเหล็ก', icon:'🔩', factor:1.7167},
+  {name:'กระดาษ', icon:'📦', factor:1.0186},
+  {name:'น้ำมัน', icon:'🫗', factor:2.9267, source:'EU RED II proxy'},
+  {name:'เศษพลาสติก', icon:'♻️', factor:1.7361},
+  {name:'อื่นๆ', icon:'📺', factor:2.4000},
+  {name:'โลหะ', icon:'🪙', factor:8.1400},
+  {name:'แก้ว', icon:'🍾', factor:0.9140}
+];
+
+// หมวด/ชื่อรายการ: อ้างอิงการจัดกลุ่มของ WasteBuy Delivery
+// Factor = GHG Reduction Factor (kgCO₂e/kg) ไม่ใช่ราคาขาย
+// ค่าที่มีอยู่เดิมในระบบ: กระดาษ 1.0186, พลาสติก 1.7361, แก้ว 0.9140, เหล็ก 1.7167, อะลูมิเนียม 8.1400, E-waste เดิม 2.4000
+// factor=null = ยังไม่ยืนยันค่าเฉพาะประเภท จึงไม่เดาค่า
 const WASTE_TYPES = [
-  // กระดาษ
-  {id:'paper_box',   name:'กระดาษลัง/ลูกฟูก', icon:'📦', factor:1.0186, group:'กระดาษ'},
-  {id:'paper_mix',   name:'กระดาษย่อย',        icon:'📄', factor:1.0186, group:'กระดาษ'},
-  {id:'newspaper',   name:'หนังสือพิมพ์',       icon:'📰', factor:1.0186, group:'กระดาษ'},
-  // พลาสติก
-  {id:'plastic',     name:'พลาสติกรวม',         icon:'♻️', factor:1.7361, group:'พลาสติก'},
-  {id:'pet_color',   name:'ขวด PET สี',         icon:'🍾', factor:1.7361, group:'พลาสติก'},
-  {id:'plastic_bag', name:'ถุงสะอาด',           icon:'🛍️', factor:1.7361, group:'พลาสติก'},
-  {id:'plastic_wh',  name:'พลาสติกขาวขุ่น',    icon:'🍶', factor:1.7361, group:'พลาสติก'},
-  // แก้ว
-  {id:'glass_clear', name:'แก้วใส',             icon:'🫙', factor:0.9140, group:'แก้ว'},
-  {id:'glass_green', name:'แก้วสีเขียว',        icon:'🍵', factor:0.9140, group:'แก้ว'},
-  {id:'glass_brown', name:'แก้วสีชา/แดง',       icon:'🍺', factor:0.9140, group:'แก้ว'},
-  {id:'glass_mix',   name:'แก้วรวม',            icon:'🥂', factor:0.9140, group:'แก้ว'},
-  // เหล็ก
-  {id:'metal_mix',   name:'เหล็กรวม',           icon:'🔩', factor:1.7167, group:'เหล็ก'},
-  {id:'tin_can',     name:'กระป๋องสังกะสี',     icon:'🥫', factor:1.7167, group:'เหล็ก'},
-  {id:'zinc_sheet',  name:'สังกะสีแผ่น',        icon:'⬜', factor:1.7167, group:'เหล็ก'},
-  // อลูมิเนียม
-  {id:'aluminum',    name:'กระป๋องอลูมิเนียม',  icon:'🥤', factor:8.1400, group:'อลูมิเนียม'},
-  {id:'alum_wheel',  name:'อลูมิเนียมล้อแม็ก', icon:'🛞', factor:8.1400, group:'อลูมิเนียม'},
-  {id:'alum_thin',   name:'อลูมิเนียมบาง/จั๊บ',icon:'📎', factor:8.1400, group:'อลูมิเนียม'},
-  // อื่นๆ
-  {id:'ewaste',      name:'อิเล็กทรอนิกส์',    icon:'📱', factor:2.4000, group:'อื่นๆ'},
+  // 1) เศษเหล็ก
+  {id:'metal_mix', name:'เหล็กรวม', icon:'🔩', factor:1.7167, group:'เศษเหล็ก', aliases:['เหล็ก','เศษเหล็ก']},
+  {id:'tin_can', name:'กระป๋องสังกะสี', icon:'🥫', factor:1.7167, group:'เศษเหล็ก', aliases:['กระป๋อง','สังกะสี']},
+  {id:'zinc_sheet', name:'สังกะสีแผ่น', icon:'⬜', factor:1.7167, group:'เศษเหล็ก', aliases:['แผ่นสังกะสี']},
+  {id:'shock_steel', name:'เหล็กโช๊ค', icon:'🔧', factor:1.7167, group:'เศษเหล็ก', aliases:['โช๊ค','โช้ค']},
+  {id:'steel_turning_wire', name:'เหล็กขี้กลึง, ลวดอยู่', icon:'⚙️', factor:1.7167, group:'เศษเหล็ก', aliases:['ขี้กลึง','ลวด']},
+
+  // 2) กระดาษ
+  {id:'paper_box', name:'กระดาษลังน้ำตาล (ลูกฟูก)', icon:'📦', factor:1.0186, group:'กระดาษ', aliases:['ลัง','ลูกฟูก','กระดาษลัง']},
+  {id:'paper_bw', name:'กระดาษขาวดำ', icon:'📄', factor:1.0186, group:'กระดาษ', aliases:['ขาวดำ','กระดาษขาว']},
+  {id:'paper_mix', name:'กระดาษย่อย / เล่ม', icon:'📚', factor:1.0186, group:'กระดาษ', aliases:['กระดาษย่อย','เล่ม']},
+  {id:'paper_core', name:'กระดาษแกน', icon:'🧻', factor:1.0186, group:'กระดาษ', aliases:['แกนกระดาษ']},
+  {id:'newspaper', name:'หนังสือพิมพ์', icon:'📰', factor:1.0186, group:'กระดาษ', aliases:['นสพ']},
+  {id:'milk_carton', name:'กล่องนม', icon:'🥛', factor:null, group:'กระดาษ', method:'LESS-WM-05', factorNote:'กล่องนม/UHT เป็นวัสดุผสม จึงยังไม่ใช้ Factor กระดาษทั่วไปแทนโดยอัตโนมัติ', aliases:['UHT','กล่องยูเอชที']},
+
+  // 3) น้ำมัน
+  {id:'used_cooking_oil', name:'น้ำมันพืชเก่า (KG)', icon:'🫗', factor:2.9267, group:'น้ำมัน', factorNote:'International proxy: EU Renewable Energy Directive waste cooking oil biodiesel pathway', aliases:['น้ำมันเก่า','น้ำมันทอด','น้ำมันพืช']},
+
+  // 4) เศษพลาสติก
+  {id:'plastic', name:'พลาสติกรวม', icon:'♻️', factor:1.7361, group:'เศษพลาสติก', aliases:['พลาสติก']},
+  {id:'plastic_small', name:'พลาสติกรวมเล็ก', icon:'🧩', factor:1.7361, group:'เศษพลาสติก', aliases:['พลาสติกเล็ก']},
+  {id:'plastic_black', name:'พลาสติกรวมดำ', icon:'⬛', factor:1.7361, group:'เศษพลาสติก', aliases:['พลาสติกดำ']},
+  {id:'plastic_brittle', name:'พลาสติกกรอบ', icon:'🧴', factor:1.7361, group:'เศษพลาสติก', aliases:['กรอบ']},
+  {id:'plastic_brittle_metal', name:'พลาสติกกรอบติดเหล็ก', icon:'🧴', factor:null, group:'เศษพลาสติก', factorNote:'เป็นวัสดุผสมพลาสติก+เหล็ก จึงยังไม่ใช้ Factor พลาสติกเพียงชนิดเดียวโดยอัตโนมัติ', aliases:['ติดเหล็ก']},
+  {id:'plastic_wh', name:'ขาวขุ่น 2', icon:'🍶', factor:1.7361, group:'เศษพลาสติก', aliases:['ขาวขุ่น','HDPE']},
+  {id:'pet_clear', name:'PET ใส', icon:'🧴', factor:1.7361, group:'เศษพลาสติก', aliases:['เพ็ทใส','ขวดเพ็ทใส']},
+  {id:'pet_clear_crushed', name:'PET ใส (บิด/เหยียบ)', icon:'🧴', factor:1.7361, group:'เศษพลาสติก', aliases:['PET บิด','PET เหยียบ']},
+  {id:'pet_color', name:'PET สี (เขียว,ชา)', icon:'🍾', factor:1.7361, group:'เศษพลาสติก', aliases:['PET สี','ขวด PET สี','เพ็ทสี']},
+  {id:'plastic_bag', name:'ถุงรวมสะอาด', icon:'🛍️', factor:1.7361, group:'เศษพลาสติก', aliases:['ถุงสะอาด','ถุงพลาสติก']},
+  {id:'laundry_bag', name:'ถุงซัก', icon:'🛍️', factor:1.7361, group:'เศษพลาสติก', aliases:['ถุง']},
+  {id:'pvc_blue', name:'ท่อ PVC ฟ้า', icon:'🧪', factor:1.7361, group:'เศษพลาสติก', aliases:['PVC ฟ้า','ท่อฟ้า']},
+  {id:'pvc_gray_yellow', name:'ท่อ PVC เทา / เหลือง', icon:'🧪', factor:1.7361, group:'เศษพลาสติก', aliases:['PVC เทา','PVC เหลือง','ท่อเทา','ท่อเหลือง']},
+  {id:'cable_sheath', name:'เปลือกสายไฟรวมสี / สีดำ', icon:'➰', factor:1.7361, group:'เศษพลาสติก', aliases:['เปลือกสายไฟ','สายไฟสีดำ']},
+  {id:'acrylic', name:'อาคิลิค', icon:'🔷', factor:1.7361, group:'เศษพลาสติก', aliases:['อะคริลิค','อคริลิค']},
+  {id:'cd_sheet', name:'แผ่น CD', icon:'💿', factor:1.7361, group:'เศษพลาสติก', aliases:['ซีดี','CD']},
+  {id:'jumbo_bag', name:'ถุงจัมโบ้', icon:'🧺', factor:1.7361, group:'เศษพลาสติก', aliases:['จัมโบ้','Jumbo bag']},
+  {id:'pet_cup_color', name:'แก้วน้ำ PET สี', icon:'🥤', factor:1.7361, group:'เศษพลาสติก', aliases:['แก้วน้ำ PET','แก้ว PET']},
+
+  // 5) อื่นๆ
+  {id:'appliance', name:'ตู้เย็น / เครื่องซักผ้า', icon:'🧺', factor:null, group:'อื่นๆ', factorNote:'เครื่องใช้ไฟฟ้ารวมหลายวัสดุ ไม่ใช้ factor เดียวแทนทั้งชิ้น', aliases:['ตู้เย็น','เครื่องซักผ้า']},
+  {id:'monitor14', name:'จอคอม 14 นิ้ว + จอทีวี 14 นิ้ว', icon:'🖥️', factor:null, group:'อื่นๆ', factorNote:'E-Waste ต้องใช้วิธีที่ตรงชนิดอุปกรณ์; LESS-WM-09 ที่เผยแพร่เฉพาะโทรศัพท์เคลื่อนที่ ไม่ควรนำมาแทนจอ', aliases:['จอ 14','ทีวี 14','คอม 14']},
+  {id:'monitor21', name:'จอคอม 21 นิ้ว + จอทีวี 21 นิ้ว', icon:'🖥️', factor:null, group:'อื่นๆ', factorNote:'E-Waste ต้องใช้วิธีที่ตรงชนิดอุปกรณ์; ไม่เดาค่า factor ให้จอคอม/ทีวี', aliases:['จอ 21','ทีวี 21','คอม 21']},
+  {id:'used_clothes', name:'เสื้อผ้ามือสอง', icon:'👕', factor:null, group:'อื่นๆ', aliases:['เสื้อผ้า','ผ้ามือสอง']},
+  {id:'car_tire', name:'ยางรถยนต์', icon:'🛞', factor:null, group:'อื่นๆ', aliases:['ยาง','ยางรถ']},
+
+  // 6) โลหะ
+  {id:'copper1', name:'ทองแดง 1', icon:'🟠', factor:null, group:'โลหะ', aliases:['ทองแดง']},
+  {id:'copper2', name:'ทองแดง 2', icon:'🟠', factor:null, group:'โลหะ', aliases:['ทองแดง']},
+  {id:'copper3', name:'ทองแดง 3', icon:'🟠', factor:null, group:'โลหะ', aliases:['ทองแดง']},
+  {id:'copper4', name:'ทองแดง 4', icon:'🟠', factor:null, group:'โลหะ', aliases:['ทองแดง']},
+  {id:'copper5', name:'ทองแดง 5', icon:'🟠', factor:null, group:'โลหะ', aliases:['ทองแดง']},
+  {id:'copper_wire_big', name:'สายไฟทองแดงไม่ปอกเส้นใหญ่', icon:'➰', factor:null, group:'โลหะ', aliases:['สายไฟทองแดง','เส้นใหญ่']},
+  {id:'copper_wire_small', name:'สายไฟทองแดงไม่ปอกเส้นเล็ก', icon:'➰', factor:null, group:'โลหะ', aliases:['สายไฟทองแดง','เส้นเล็ก']},
+  {id:'brass_thick', name:'ทองเหลืองหนา', icon:'🟡', factor:null, group:'โลหะ', aliases:['ทองเหลือง']},
+  {id:'brass_thin', name:'ทองเหลืองบาง', icon:'🟡', factor:null, group:'โลหะ', aliases:['ทองเหลือง']},
+  {id:'brass_steel', name:'ทองเหลืองติดเหล็ก', icon:'🟡', factor:null, group:'โลหะ', aliases:['ทองเหลือง','ติดเหล็ก']},
+  {id:'alum_thick', name:'อลูมิเนียมหนา', icon:'⚪', factor:8.1400, group:'โลหะ', aliases:['อะลูมิเนียมหนา']},
+  {id:'alum_thin', name:'อลูมิเนียมบาง', icon:'📎', factor:8.1400, group:'โลหะ', aliases:['อะลูมิเนียมบาง']},
+  {id:'alum_alloy', name:'อลูมิเนียมอัลลอย', icon:'🔘', factor:8.1400, group:'โลหะ', aliases:['อะลูมิเนียมอัลลอย','alloy']},
+  {id:'aluminum', name:'อลูมิเนียมกระป๋อง', icon:'🥤', factor:8.1400, group:'โลหะ', aliases:['อะลูมิเนียมกระป๋อง','กระป๋องอลูมิเนียม']},
+  {id:'alum_can_crushed', name:'อลูมิเนียมกระป๋อง (บด/เหยียบ)', icon:'🥤', factor:8.1400, group:'โลหะ', aliases:['กระป๋องบด','กระป๋องเหยียบ']},
+  {id:'alum_jib', name:'อลูมิเนียมจั๊บ', icon:'🔩', factor:8.1400, group:'โลหะ', aliases:['จั๊บ']},
+  {id:'alum_steel30', name:'อลูมิเนียมติดเหล็กไม่เกิน 30%', icon:'🔩', factor:null, group:'โลหะ', factorNote:'เป็นวัสดุผสม จึงยังไม่ใช้ Factor อะลูมิเนียมล้วนโดยอัตโนมัติ', aliases:['ติดเหล็ก 30']},
+  {id:'alum_cap_m100', name:'อลูมิเนียมฝาจุกแกะ (M100)', icon:'🧢', factor:8.1400, group:'โลหะ', aliases:['ฝาจุก','M100']},
+  {id:'alum_wheel', name:'อลูมิเนียมล้อแม็กรถยนต์', icon:'🛞', factor:8.1400, group:'โลหะ', aliases:['ล้อแม็ก','แม็กรถยนต์']},
+  {id:'alum_horse', name:'หัวม้าไส้อลูมิเนียม', icon:'⚙️', factor:null, group:'โลหะ', factorNote:'เป็นชิ้นส่วนผสมหลายวัสดุ จึงยังไม่ใช้ Factor อะลูมิเนียมล้วนโดยอัตโนมัติ', aliases:['หัวม้า']},
+  {id:'lead_hard', name:'ตะกั่วแข็ง', icon:'⚫', factor:null, group:'โลหะ', aliases:['ตะกั่ว']},
+  {id:'lead_soft', name:'ตะกั่วอ่อน', icon:'⚫', factor:null, group:'โลหะ', aliases:['ตะกั่ว']},
+  {id:'stainless_clean', name:'สแตนเลสจุดไม่ติด', icon:'🔘', factor:null, group:'โลหะ', aliases:['สแตนเลส']},
+  {id:'scrap_motor', name:'ของแกะ / คอมแอร์ / มอเตอร์', icon:'⚙️', factor:null, group:'โลหะ', aliases:['คอมแอร์','มอเตอร์','ของแกะ']},
+  {id:'aircon_scrap', name:'ของแกะแอร์', icon:'❄️', factor:null, group:'โลหะ', aliases:['แอร์']},
+  {id:'battery_white', name:'แบตขาว', icon:'🔋', factor:null, group:'โลหะ', aliases:['แบตเตอรี่ขาว']},
+  {id:'battery_black_big', name:'แบตดำใหญ่', icon:'🔋', factor:null, group:'โลหะ', aliases:['แบตเตอรี่ดำใหญ่']},
+  {id:'battery_small', name:'แบตเล็ก', icon:'🔋', factor:null, group:'โลหะ', aliases:['แบตเตอรี่เล็ก']},
+
+  // 7) แก้ว
+  {id:'glass_brown', name:'แก้วแดง', icon:'🍾', factor:0.9140, group:'แก้ว', aliases:['แก้วชา','แก้วสีน้ำตาล']},
+  {id:'glass_clear', name:'แก้วขาว', icon:'🫙', factor:0.9140, group:'แก้ว', aliases:['แก้วใส','แก้วสีขาว']},
+  {id:'glass_green', name:'แก้วเขียว', icon:'🍾', factor:0.9140, group:'แก้ว', aliases:['แก้วสีเขียว']},
+  {id:'glass_mix', name:'แก้วรวม', icon:'🥂', factor:0.9140, group:'แก้ว', aliases:['เศษแก้ว']},
+  {id:'leo_bottle', name:'เบียร์ลีโอ', icon:'🍺', factor:0.9140, group:'แก้ว', aliases:['ลีโอ','Leo']},
+  {id:'chang_big_new', name:'เบียร์ช้างใหญ่ (แบบใหม่)', icon:'🍺', factor:0.9140, group:'แก้ว', aliases:['ช้าง','Chang']},
+  {id:'white_liquor_big', name:'เหล้าขาวใหญ่', icon:'🍶', factor:0.9140, group:'แก้ว', aliases:['เหล้าขาว']},
+  {id:'white_liquor_small', name:'เหล้าขาวเล็ก', icon:'🍶', factor:0.9140, group:'แก้ว', aliases:['เหล้าขาว']},
+  {id:'singha_long_big', name:'เบียร์สิงห์คอยาวใหญ่', icon:'🍺', factor:0.9140, group:'แก้ว', aliases:['สิงห์','Singha']},
+
+  // เก็บไว้เพื่ออ่านข้อมูลเก่าที่เคยบันทึก โดยไม่แสดงเป็นตัวเลือกใหม่
+  {id:'ewaste', name:'อิเล็กทรอนิกส์ (ข้อมูลเดิม)', icon:'📱', factor:null, group:'อื่นๆ', hidden:true}
 ];
 let records=[], selectedWaste=null, currentSchool=null, uploadedPhotoUrls=[];
+let saleCart=[];
 
 window.onload = function() {
   setupSchoolCodeInput();
   const saved = localStorage.getItem('ghg_school');
   if (saved) { currentSchool = JSON.parse(saved); startApp(); }
-  buildWasteGrid(); buildFactorTable();
+  buildWasteGrid(); buildFactorTable(); renderSaleCart();
   // populate edit modal select
   const editSel = document.getElementById('editWasteType');
-  if (editSel) WASTE_TYPES.forEach(w=>{ editSel.innerHTML+='<option value="'+w.id+'">'+w.icon+' '+w.name+'</option>'; });
+  if (editSel) WASTE_TYPES.filter(w=>!w.hidden).forEach(w=>{ editSel.innerHTML+='<option value="'+w.id+'">'+w.icon+' '+w.name+'</option>'; });
   const today = new Date();
   document.getElementById('dateInput').value =
     today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
   document.getElementById('weightInput').addEventListener('input', updateCalc);
+  ['saleValueInput','recorderInput','dateInput'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){ el.addEventListener('input', updateSubmitState); el.addEventListener('change', updateSubmitState); }
+  });
+  updateSubmitState();
 };
 
 // ── ADMIN ──
@@ -954,6 +1165,7 @@ async function processAndUploadPhoto(file) {
 
         document.getElementById('uploadProgress').classList.add('show');
         document.getElementById('uploadProgressText').textContent = 'อัปโหลดรูป '+(idx+1)+'...';
+        updateSubmitState();
 
         try {
           const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, photo:base64, mimeType:'image/jpeg'});
@@ -970,6 +1182,7 @@ async function processAndUploadPhoto(file) {
           uploadedPhotoUrls[idx] = '';
         }
         document.getElementById('uploadProgress').classList.remove('show');
+        updateSubmitState();
         resolve();
       };
       img.src = ev.target.result;
@@ -982,58 +1195,110 @@ function removePhotoAt(idx) {
   uploadedPhotoUrls[idx] = null;
   const div = document.getElementById('photoThumb_'+idx);
   if (div) div.remove();
+  updateSubmitState();
 }
 
 function clearPhotos() {
   uploadedPhotoUrls = [];
   document.getElementById('photoPreviewList').innerHTML = '';
   document.getElementById('photoInput').value = '';
+  updateSubmitState();
+}
+
+// ── REQUIRED FIELD VALIDATION ──
+function getSaleSubmitState(){
+  const missing=[];
+  if(!saleCart.length) missing.push('รายการขยะ');
+  const saleRaw=(document.getElementById('saleValueInput')?.value||'').trim();
+  const sale=parseFloat(saleRaw);
+  if(saleRaw==='' || !Number.isFinite(sale) || sale<=0) missing.push('มูลค่าการขายรวม');
+  const recorder=(document.getElementById('recorderInput')?.value||'').trim();
+  if(!recorder) missing.push('ชื่อผู้บันทึก');
+  const dateVal=document.getElementById('dateInput')?.value||'';
+  if(!dateVal) missing.push('วันที่ขาย/วันที่บันทึก');
+  const validPhotos=uploadedPhotoUrls.filter(u=>typeof u==='string' && u.trim()!=='');
+  const uploading=document.getElementById('uploadProgress')?.classList.contains('show');
+  if(uploading) missing.push('รออัปโหลดรูปให้เสร็จ');
+  else if(validPhotos.length===0) missing.push('รูปถ่าย');
+  return {ready:missing.length===0, missing};
+}
+function updateSubmitState(){
+  const btn=document.getElementById('saveBtn');
+  const status=document.getElementById('submitStatus');
+  if(!btn) return;
+  const state=getSaleSubmitState();
+  btn.disabled=!state.ready;
+  if(status){
+    status.classList.toggle('ready',state.ready);
+    status.textContent=state.ready
+      ? '✅ ข้อมูลครบแล้ว พร้อมบันทึก '+saleCart.length+' รายการ'
+      : 'ยังบันทึกไม่ได้ — กรุณากรอก/เลือก: '+state.missing.join(', ');
+  }
 }
 
 // ── SAVE ──
 async function saveRecord() {
-  if (!selectedWaste) { showToast('⚠️ กรุณาเลือกประเภทขยะ'); return; }
-  const w = parseFloat(document.getElementById('weightInput').value);
-  if (!w||w<=0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
-  const saleValue = parseFloat(document.getElementById('saleValueInput').value);
-  if (!saleValue||saleValue<=0) { showToast('⚠️ กรุณาใส่มูลค่าการขาย'); return; }
+  const submitState=getSaleSubmitState();
+  if(!submitState.ready){ updateSubmitState(); showToast('⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง'); return; }
+  if (!saleCart.length) { showToast('⚠️ กรุณาเพิ่มขยะอย่างน้อย 1 รายการ'); return; }
+  const totalSale = parseFloat(document.getElementById('saleValueInput').value);
+  if (!totalSale||totalSale<=0) { showToast('⚠️ กรุณาใส่มูลค่าการขายรวม'); return; }
   const recorder = document.getElementById('recorderInput').value.trim();
   if (!recorder) { showToast('⚠️ กรุณาใส่ชื่อผู้บันทึก'); return; }
   const dateVal = document.getElementById('dateInput').value;
   if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
   const validPhotos = uploadedPhotoUrls.filter(u => u && u !== null && u !== '');
   if (validPhotos.length === 0) { showToast('⚠️ กรุณาเพิ่มรูปถ่ายอย่างน้อย 1 รูป'); return; }
-  const co2 = w * selectedWaste.factor;
+
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
-
+  const totalWeight = saleCart.reduce((s,x)=>s+x.weight,0);
+  const batchId='SALE-'+dateVal.replaceAll('-','')+'-'+Date.now().toString().slice(-6);
   const btn = document.getElementById('saveBtn');
-  btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก...';
+  btn.disabled=true;
+
+  let saved=0, allocatedSale=0;
   try {
-    const res = await gasPost({
-      action:'saveRecord', school_code:currentSchool.code,
-      waste_type:selectedWaste.id, waste_name:selectedWaste.name,
-      waste_group: selectedWaste.group||'',
-      weight_kg:w, co2e_kg:co2, trees_equiv:co2/9.5,
-      sale_value: saleValue,
-      recorder: recorder,
-      date_th_override: dateTh,
-      photo_urls: validPhotos  // array of URLs
-    });
-    if (res.success) {
-      showToast('✅ บันทึกสำเร็จ!');
-      document.getElementById('weightInput').value='';
-      document.getElementById('saleValueInput').value='';
-      document.getElementById('recorderInput').value='';
-      document.getElementById('calcResult').classList.remove('show');
-      document.querySelectorAll('.waste-btn').forEach(b=>b.classList.remove('selected'));
-      selectedWaste=null;
-      clearPhotos();
-      await loadFromServer();
-      showPage('dashboard', document.querySelectorAll('.nav-tab')[0]);
-    } else showToast('❌ '+(res.error||'บันทึกไม่สำเร็จ'));
-  } catch(e) { showToast('❌ ไม่สามารถเชื่อมต่อได้'); }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i>บันทึกข้อมูล';
+    for (let i=0;i<saleCart.length;i++) {
+      const item=saleCart[i];
+      btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก '+(i+1)+'/'+saleCart.length;
+      const gf=getGroupFactor(item.group);
+      const co2=gf==null ? 0 : item.weight*gf;
+      // กระจายยอดขายรวมตามสัดส่วนน้ำหนัก เพื่อให้ Dashboard รวมยอดไม่ซ้ำ
+      let saleShare;
+      if(i===saleCart.length-1) saleShare=Math.max(0,totalSale-allocatedSale);
+      else {
+        saleShare=Math.round((totalSale*(item.weight/totalWeight))*100)/100;
+        allocatedSale+=saleShare;
+      }
+      const res = await gasPost({
+        action:'saveRecord', school_code:currentSchool.code,
+        waste_type:item.id, waste_name:item.name, waste_group:item.group||'',
+        weight_kg:item.weight, co2e_kg:co2, trees_equiv:co2/9.5,
+        sale_value:saleShare,
+        recorder:recorder,
+        date_th_override:dateTh,
+        photo_urls:validPhotos,
+        batch_id:batchId
+      });
+      if(!res || !res.success) throw new Error((res&&res.error)||'บันทึกรายการไม่สำเร็จ');
+      saved++;
+    }
+
+    showToast('✅ บันทึก '+saved+' รายการสำเร็จ!');
+    saleCart=[];
+    renderSaleCart();
+    document.getElementById('saleValueInput').value='';
+    document.getElementById('recorderInput').value='';
+    resetWasteSelection();
+    clearPhotos();
+    await loadFromServer();
+    showPage('dashboard', document.querySelectorAll('.nav-tab')[0]);
+  } catch(e) {
+    showToast('❌ บันทึกได้ '+saved+'/'+saleCart.length+' รายการ: '+(e.message||'ไม่สามารถเชื่อมต่อได้'));
+  }
+  btn.disabled=false;
+  btn.innerHTML='<i class="ti ti-device-floppy"></i>บันทึกทั้งหมด <span class="save-count" id="saveItemCount">'+saleCart.length+' รายการ</span>';
 }
 
 // ── FILTER ──
@@ -1326,12 +1591,19 @@ async function saveEdit() {
   const wasteId  = document.getElementById('editWasteType').value;
   const weight   = parseFloat(document.getElementById('editWeight').value);
   const dateVal  = document.getElementById('editDate').value;
-  const saleValue = parseFloat(document.getElementById('editSaleValue').value)||0;
+  const saleValueRaw = document.getElementById('editSaleValue').value.trim();
+  const saleValue = parseFloat(saleValueRaw);
   const recorder  = document.getElementById('editRecorder').value.trim();
+  if (!wasteId) { showToast('⚠️ กรุณาเลือกประเภทขยะ'); return; }
   if (!weight||weight<=0) { showToast('⚠️ กรุณาใส่น้ำหนัก'); return; }
+  if (saleValueRaw==='' || !Number.isFinite(saleValue) || saleValue<=0) { showToast('⚠️ กรุณาใส่มูลค่าการขาย'); return; }
+  if (!recorder) { showToast('⚠️ กรุณาใส่ชื่อผู้บันทึก'); return; }
   if (!dateVal) { showToast('⚠️ กรุณาเลือกวันที่'); return; }
+  const validEditPhotos=(editPhotoUrls||[]).filter(u=>typeof u==='string' && u.trim()!=='');
+  if(validEditPhotos.length===0){ showToast('⚠️ กรุณาเพิ่มรูปถ่ายอย่างน้อย 1 รูป'); return; }
   const wt = WASTE_TYPES.find(w=>w.id===wasteId);
-  const co2 = weight*(wt?wt.factor:1);
+  const groupFactor = wt ? getGroupFactor(wt.group) : null;
+  const co2 = groupFactor!=null ? weight*groupFactor : 0;
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
   const btn=document.getElementById('editSaveBtn');
@@ -1350,7 +1622,7 @@ async function saveEdit() {
       sale_value:saleValue,
       recorder:recorder,
       date_th_override:dateTh,
-      photo_urls: editPhotoUrls
+      photo_urls: validEditPhotos
     });
     if (res.success) {
       showToast('✅ แก้ไขสำเร็จ');
@@ -1428,12 +1700,13 @@ async function gasPost(data) {
 // ── WASTE TYPE CHARTS ──
 // สีตามหมวดหมู่ — ทุก entry ในกลุ่มเดียวกันใช้เฉดสีเดียวกัน
 const GROUP_COLORS = {
-  'กระดาษ':    ['#f4a261','#e76f51','#e9c46a'],
-  'พลาสติก':   ['#a8dadc','#457b9d','#1d3557','#74b3ce'],
-  'แก้ว':      ['#b7e4c7','#52b788','#2d6a4f','#95d5b2'],
-  'เหล็ก':     ['#adb5bd','#868e96','#495057'],
-  'อลูมิเนียม':['#c77dff','#9d4edd','#7b2d8b'],
-  'อื่นๆ':     ['#ffb703'],
+  'เศษเหล็ก': ['#c8ced6','#9aa3ad','#77808a','#b6bdc5'],
+  'กระดาษ': ['#e9c46a','#f4a261','#d4a373','#faedcd'],
+  'น้ำมัน': ['#f5c451','#e6b325'],
+  'เศษพลาสติก': ['#8ecae6','#219ebc','#90e0ef','#48cae4'],
+  'อื่นๆ': ['#adb5bd','#ced4da','#dee2e6'],
+  'โลหะ': ['#c77dff','#9d4edd','#b8b8d1','#8d99ae'],
+  'แก้ว': ['#b7e4c7','#52b788','#2d6a4f','#95d5b2']
 };
 function getWasteColor(w) {
   const grp = w.group || 'อื่นๆ';
@@ -1717,53 +1990,245 @@ function closeBarModal() {
   document.getElementById('barExpandModal').classList.remove('open');
 }
 
+let selectedWasteGroup = null;
+
+function escapeHtml(v) {
+  return String(v ?? '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function getGroupFactor(groupName) {
+  const group = WASTE_GROUPS.find(g=>g.name===groupName);
+  return group && group.factor !== undefined ? group.factor : null;
+}
+function factorText(wOrGroup) {
+  const groupName = typeof wOrGroup === 'string' ? wOrGroup : (wOrGroup ? wOrGroup.group : '');
+  const factor = getGroupFactor(groupName);
+  return factor == null ? '— รอตรวจสอบ Factor' : Number(factor).toFixed(4) + ' kgCO₂e/kg';
+}
 function buildWasteGrid() {
   const grid=document.getElementById('wasteGrid');
-  // จัดกลุ่ม
-  const groups = {};
-  WASTE_TYPES.forEach(w => {
-    if (!groups[w.group]) groups[w.group] = [];
-    groups[w.group].push(w);
-  });
-  const groupColors = {'กระดาษ':'#fef9c3','พลาสติก':'#dbeafe','แก้ว':'#e0f2fe','เหล็ก':'#fde8d8','อลูมิเนียม':'#f3e8ff','อื่นๆ':'#f1f5f9'};
-  Object.entries(groups).forEach(([grp, types]) => {
-    const label = document.createElement('div');
-    label.style.cssText = 'font-size:12px;font-weight:700;color:var(--g600);margin:10px 0 6px;padding:4px 8px;background:'+groupColors[grp]+';border-radius:8px;display:inline-block;';
-    label.textContent = grp;
-    grid.appendChild(label);
-    const row = document.createElement('div');
-    row.className = 'waste-grid';
-    types.forEach(w => {
-      const btn = document.createElement('button');
-      btn.className='waste-btn'; btn.id='wb_'+w.id;
-      btn.onclick=()=>selectWaste(w.id);
-      btn.innerHTML='<span class="icon">'+w.icon+'</span><span class="name">'+w.name+'</span><span class="factor">'+w.factor+' kgCO₂e</span>';
-      row.appendChild(btn);
-    });
-    grid.appendChild(row);
+  grid.innerHTML='';
+  WASTE_GROUPS.forEach(g => {
+    const count=WASTE_TYPES.filter(w=>!w.hidden && w.group===g.name).length;
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='waste-group-btn'; btn.dataset.group=g.name;
+    btn.onclick=()=>selectWasteGroup(g.name);
+    btn.innerHTML='<span class="gicon">'+g.icon+'</span><span class="gname">'+g.name+'</span><span class="gcount">'+count+' รายการ</span>';
+    grid.appendChild(btn);
   });
 }
+function selectWasteGroup(groupName, keepSelection=false) {
+  selectedWasteGroup=groupName;
+  document.querySelectorAll('.waste-group-btn').forEach(b=>b.classList.toggle('active',b.dataset.group===groupName));
+  const g=WASTE_GROUPS.find(x=>x.name===groupName)||{icon:'♻️',name:groupName};
+  const items=WASTE_TYPES.filter(w=>!w.hidden && w.group===groupName);
+  document.getElementById('wasteSubGroupIcon').textContent=g.icon;
+  document.getElementById('wasteSubGroupTitle').textContent='เลือก'+groupName+'ย่อย';
+  document.getElementById('wasteSubCount').textContent=items.length+' รายการ';
+  const sel=document.getElementById('wasteSubtypeSelect');
+  const oldVal=keepSelection && selectedWaste ? selectedWaste.id : '';
+  sel.innerHTML='<option value="">— เลือกประเภทย่อย —</option>'+items.map(w=>'<option value="'+escapeHtml(w.id)+'">'+escapeHtml(w.name)+'</option>').join('');
+  sel.value=items.some(w=>w.id===oldVal)?oldVal:'';
+  document.getElementById('wasteSubPanel').classList.add('show');
+}
+function onWasteSubtypeChange() {
+  const id=document.getElementById('wasteSubtypeSelect').value;
+  if (id) selectWaste(id);
+}
+
+function normalizeWasteText(v) {
+  return String(v||'').toLowerCase().normalize('NFKC').replace(/[\s\-_/().,+]/g,'');
+}
+function levenshtein(a,b) {
+  if(!a.length) return b.length; if(!b.length) return a.length;
+  const prev=Array.from({length:b.length+1},(_,i)=>i); const cur=new Array(b.length+1);
+  for(let i=1;i<=a.length;i++){
+    cur[0]=i;
+    for(let j=1;j<=b.length;j++) cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    for(let j=0;j<=b.length;j++) prev[j]=cur[j];
+  }
+  return prev[b.length];
+}
+function wasteSearchScore(w,qRaw) {
+  const q=normalizeWasteText(qRaw); if(!q) return 999;
+  const terms=[w.name,w.group,...(w.aliases||[])].map(normalizeWasteText);
+  let best=999;
+  terms.forEach(t=>{
+    if(t===q) best=Math.min(best,0);
+    else if(t.startsWith(q)) best=Math.min(best,1);
+    else if(t.includes(q)) best=Math.min(best,2);
+    else {
+      const words=String(w.name+' '+(w.aliases||[]).join(' ')).toLowerCase().split(/\s+/).map(normalizeWasteText).filter(Boolean);
+      const d=Math.min(...words.map(x=>levenshtein(x,q)),99);
+      const allow=q.length<=4?1:Math.max(2,Math.floor(q.length*.28));
+      if(d<=allow) best=Math.min(best,10+d);
+    }
+  });
+  return best;
+}
+function searchWaste(qRaw) {
+  const box=document.getElementById('wasteSearchResults');
+  const clear=document.getElementById('wasteSearchClear');
+  const q=String(qRaw||'').trim(); clear.style.display=q?'block':'none';
+  if(!q){box.classList.remove('show');box.innerHTML='';return;}
+  const matches=WASTE_TYPES.filter(w=>!w.hidden).map(w=>({w,score:wasteSearchScore(w,q)})).filter(x=>x.score<999).sort((a,b)=>a.score-b.score||a.w.name.localeCompare(b.w.name,'th')).slice(0,10);
+  if(!matches.length){box.innerHTML='<div class="waste-search-empty">ไม่พบรายการที่ใกล้เคียง ลองพิมพ์คำสั้นลง เช่น “PET”, “แก้ว”, “ทองแดง”</div>';box.classList.add('show');return;}
+  box.innerHTML=matches.map(({w})=>'<button type="button" class="waste-search-item" onclick="selectWasteFromSearch(\''+w.id+'\')"><span class="sicon">'+w.icon+'</span><span class="stxt"><span class="sname">'+escapeHtml(w.name)+'</span><span class="smeta">'+escapeHtml(w.group)+'</span></span></button>').join('');
+  box.classList.add('show');
+}
+function selectWasteFromSearch(id) {
+  const w=WASTE_TYPES.find(x=>x.id===id); if(!w) return;
+  selectWasteGroup(w.group);
+  document.getElementById('wasteSubtypeSelect').value=id;
+  selectWaste(id);
+  clearWasteSearch();
+}
+function clearWasteSearch() {
+  const inp=document.getElementById('wasteSearchInput'); if(inp) inp.value='';
+  const box=document.getElementById('wasteSearchResults'); if(box){box.classList.remove('show');box.innerHTML='';}
+  const clear=document.getElementById('wasteSearchClear'); if(clear) clear.style.display='none';
+}
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.waste-search-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('wasteSearchResults')?.classList.remove('show');
+});
+
 function buildFactorTable() {
   const tbody=document.getElementById('factorTableBody');
-  WASTE_TYPES.forEach(w=>{ tbody.innerHTML+='<tr><td>'+w.icon+' '+w.name+'</td><td><b>'+w.factor+'</b></td><td>อบก. TGO</td></tr>'; });
+  if(!tbody) return;
+  const rows=WASTE_GROUPS.map(g=>[
+    g.icon+' '+g.name,
+    g.factor==null ? '—' : Number(g.factor).toFixed(4),
+    g.factor==null ? 'รอตรวจสอบ Factor ของกลุ่ม' : (g.name==='น้ำมัน' ? 'EU RED II proxy — ใช้ค่าเดียวกันทุกประเภทย่อยในกลุ่ม' : 'ใช้ค่าเดียวกันทุกประเภทย่อยในกลุ่ม')
+  ]);
+  tbody.innerHTML=rows.map(r=>'<tr><td>'+r[0]+'</td><td><b>'+r[1]+'</b></td><td>'+r[2]+'</td></tr>').join('');
+}
+function renderSelectedWasteCard() {
+  if(!selectedWaste) return;
+  document.getElementById('selectedWasteIcon').textContent=selectedWaste.icon;
+  document.getElementById('selectedWasteName').textContent=selectedWaste.name;
+  document.getElementById('selectedWasteGroup').textContent='หมวด '+selectedWaste.group;
+  document.getElementById('selectedWasteFactor').textContent=factorText(selectedWaste);
+  const note=document.getElementById('selectedFactorNote');
+  const groupFactor=getGroupFactor(selectedWaste.group);
+  if(groupFactor==null){
+    note.textContent='กลุ่ม '+selectedWaste.group+' ยังไม่มี GHG Reduction Factor ที่กำหนด จึงยังไม่รวม GHG ในการคำนวณ';
+    note.classList.add('show');
+  } else { note.textContent='ทุกรายการย่อยในกลุ่ม '+selectedWaste.group+' ใช้ Factor เดียวกันในการคำนวณ'; note.classList.remove('show'); }
+  document.getElementById('wasteSelectedCard').classList.add('show');
 }
 function selectWaste(id) {
   selectedWaste=WASTE_TYPES.find(w=>w.id===id);
-  document.querySelectorAll('.waste-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('wb_'+id).classList.add('selected');
+  if(!selectedWaste) return;
+  if(selectedWasteGroup!==selectedWaste.group) selectWasteGroup(selectedWaste.group,true);
+  const sel=document.getElementById('wasteSubtypeSelect'); if(sel) sel.value=id;
+  renderSelectedWasteCard();
   updateCalc();
 }
 function updateCalc() {
   if (!selectedWaste) return;
   const w=parseFloat(document.getElementById('weightInput').value);
-  if (!w||w<=0) return;
-  const co2=w*selectedWaste.factor;
+  const note=document.getElementById('rCo2Note');
   document.getElementById('rType').textContent=selectedWaste.icon+' '+selectedWaste.name;
+  document.getElementById('rFactor').textContent=factorText(selectedWaste);
+  if (!w||w<=0) return;
   document.getElementById('rWeight').textContent=w.toFixed(2)+' kg';
-  document.getElementById('rFactor').textContent=selectedWaste.factor+' kgCO₂e/kg';
-  document.getElementById('rCO2').textContent=co2.toFixed(3)+' kg CO₂e';
-  document.getElementById('rTree').textContent=(co2/9.5).toFixed(2);
+  const groupFactor=getGroupFactor(selectedWaste.group);
+  if(groupFactor==null){
+    document.getElementById('rCO2').textContent='ยังไม่คำนวณ GHG';
+    document.getElementById('rTree').textContent='0';
+    if(note) note.textContent='บันทึกน้ำหนัก/มูลค่าได้ แต่ไม่รวม GHG เพราะยังไม่มี Factor ที่ตรงประเภท';
+  } else {
+    const co2=w*groupFactor;
+    document.getElementById('rCO2').textContent=co2.toFixed(3)+' kg CO₂e';
+    document.getElementById('rTree').textContent=(co2/9.5).toFixed(2);
+    if(note) note.textContent='ปริมาณก๊าซเรือนกระจกที่ลดได้จากการรีไซเคิล';
+  }
   document.getElementById('calcResult').classList.add('show');
+}
+
+function addCurrentWasteToCart(){
+  if(!selectedWaste){showToast('⚠️ กรุณาเลือกประเภทขยะ');return;}
+  const input=document.getElementById('weightInput');
+  const weight=parseFloat(input.value);
+  if(!weight||weight<=0){showToast('⚠️ กรุณาใส่น้ำหนักรายการนี้');input.focus();return;}
+  const existingIndex=saleCart.findIndex(x=>x.id===selectedWaste.id);
+  if(existingIndex>=0){
+    saleCart[existingIndex].weight+=weight;
+    showToast('➕ รวมน้ำหนักกับรายการเดิมแล้ว');
+  }else{
+    saleCart.push({id:selectedWaste.id,name:selectedWaste.name,group:selectedWaste.group,icon:selectedWaste.icon,weight:weight});
+    showToast('✅ เพิ่ม '+selectedWaste.name+' แล้ว');
+  }
+  renderSaleCart();
+  input.value='';
+  document.getElementById('calcResult')?.classList.remove('show');
+  // เก็บหมวดเดิมไว้ เพื่อเพิ่มรายการย่อยชนิดต่อไปได้เร็ว
+  selectedWaste=null;
+  document.getElementById('wasteSelectedCard')?.classList.remove('show');
+  const sel=document.getElementById('wasteSubtypeSelect'); if(sel) sel.value='';
+}
+function renderSaleCart(){
+  const card=document.getElementById('saleCartCard');
+  const list=document.getElementById('saleCartList');
+  const count=document.getElementById('saleCartCount');
+  const saveCount=document.getElementById('saveItemCount');
+  const summary=document.getElementById('saleCartSummary');
+  if(count) count.textContent=saleCart.length;
+  if(saveCount) saveCount.textContent=saleCart.length+' รายการ';
+  if(!card||!list||!summary) return;
+  if(!saleCart.length){card.classList.remove('show');list.innerHTML='';summary.innerHTML='';updateSubmitState();return;}
+  card.classList.add('show');
+  list.innerHTML=saleCart.map((item,i)=>{
+    return '<div class="sale-cart-item">'+
+      '<div class="sale-cart-icon">'+item.icon+'</div>'+
+      '<div><div class="sale-cart-name">'+escapeHtml(item.name)+'</div>'+
+      '<div class="sale-cart-meta">'+escapeHtml(item.group)+' · <b>'+item.weight.toFixed(2)+' kg</b></div></div>'+
+      '<div class="sale-cart-actions"><button type="button" class="sale-cart-action" title="แก้ไข" onclick="editCartItem('+i+')"><i class="ti ti-pencil"></i></button><button type="button" class="sale-cart-action danger" title="ลบ" onclick="removeCartItem('+i+')"><i class="ti ti-trash"></i></button></div>'+
+      '</div>';
+  }).join('');
+  const totalWeight=saleCart.reduce((s,x)=>s+x.weight,0);
+  let totalCo2=0, pending=0;
+  saleCart.forEach(x=>{const gf=getGroupFactor(x.group);if(gf==null) pending++; else totalCo2+=x.weight*gf;});
+  summary.innerHTML='<div class="sale-cart-stat"><div class="lbl">จำนวนรายการ</div><div class="val">'+saleCart.length+' รายการ</div></div>'+
+    '<div class="sale-cart-stat"><div class="lbl">น้ำหนักรวม</div><div class="val">'+totalWeight.toFixed(2)+' kg</div></div>'+
+    '<div class="sale-cart-stat full"><div class="lbl">GHG ลดได้รวม</div><div class="val">'+totalCo2.toFixed(3)+' kgCO₂e</div>'+(pending?'<div style="font-size:9px;color:#8a5a00;margin-top:2px;">มี '+pending+' รายการที่ยังไม่มี Factor จึงไม่รวมในยอด GHG</div>':'')+'</div>';
+  updateSubmitState();
+}
+function removeCartItem(index){
+  if(index<0||index>=saleCart.length)return;
+  const name=saleCart[index].name;
+  saleCart.splice(index,1);
+  renderSaleCart();
+  showToast('🗑️ ลบ '+name+' แล้ว');
+}
+function editCartItem(index){
+  const item=saleCart[index]; if(!item)return;
+  saleCart.splice(index,1);
+  renderSaleCart();
+  selectWasteGroup(item.group);
+  const sel=document.getElementById('wasteSubtypeSelect'); if(sel) sel.value=item.id;
+  selectWaste(item.id);
+  document.getElementById('weightInput').value=item.weight;
+  updateCalc();
+  document.getElementById('weightInput').focus();
+  showToast('✏️ แก้ไขแล้วกด “เพิ่มรายการ” อีกครั้ง');
+}
+function clearSaleCart(){
+  if(!saleCart.length)return;
+  if(!confirm('ล้างรายการขยะทั้งหมดในตะกร้า?'))return;
+  saleCart=[];renderSaleCart();showToast('ล้างรายการแล้ว');
+}
+
+function resetWasteSelection(){
+  selectedWaste=null; selectedWasteGroup=null;
+  document.querySelectorAll('.waste-group-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('wasteSubPanel')?.classList.remove('show');
+  document.getElementById('wasteSelectedCard')?.classList.remove('show');
+  const sel=document.getElementById('wasteSubtypeSelect'); if(sel) sel.value='';
+  clearWasteSearch();
+  const wi=document.getElementById('weightInput'); if(wi) wi.value='';
+  document.getElementById('calcResult')?.classList.remove('show');
 }
 function showPage(id,tab) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
