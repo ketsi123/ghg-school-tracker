@@ -332,8 +332,8 @@ select:focus { border-color:var(--g500); }
 
 
 /* ===== Multi-item sale cart ===== */
-.cart-add-row{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:8px;align-items:end;margin-top:12px}
-.cart-weight-wrap label{font-size:11px;margin-bottom:4px}
+.cart-add-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 118px;gap:8px;align-items:end;margin-top:12px}
+.cart-weight-wrap label,.cart-price-wrap label{font-size:11px;margin-bottom:4px}
 .cart-add-btn{height:43px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--g500),var(--g600));color:#fff;font-family:'Kanit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 10px rgba(46,158,100,.22)}
 .cart-add-btn:active{transform:scale(.98)}
 .sale-cart-card{display:none}.sale-cart-card.show{display:block}
@@ -352,8 +352,43 @@ select:focus { border-color:var(--g500); }
 .batch-note{font-size:10px;color:var(--muted);line-height:1.45;margin-top:7px}
 .common-data-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:6px}
 .save-all-btn .save-count{background:rgba(255,255,255,.18);border-radius:20px;padding:1px 7px;font-size:11px}
+@media(max-width:420px){.cart-add-row{grid-template-columns:1fr 1fr}.cart-add-btn{grid-column:1/-1}}
 @media(max-width:360px){.cart-add-row{grid-template-columns:1fr}.cart-add-btn{height:42px}.sale-cart-item{grid-template-columns:34px minmax(0,1fr) auto}.sale-cart-icon{width:34px;height:34px;font-size:20px}}
 .required-mark{color:#dc2626;font-weight:800;margin-left:2px}.submit-status{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:10.5px;line-height:1.45;border:1px solid #fed7aa}.submit-status.ready{background:var(--g50);color:var(--g700);border-color:var(--g100)}#saveBtn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none;filter:grayscale(.15)}.required-hint{font-size:9.5px;color:#dc2626;margin-top:4px}
+
+
+/* ===== Batch history / recent-sale cards ===== */
+.batch-card{background:#fff;border:1px solid var(--border);border-radius:15px;padding:12px 13px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.025)}
+.batch-card:last-child{margin-bottom:0}
+.batch-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:9px;border-bottom:1px solid rgba(46,158,100,.10)}
+.batch-head-main{min-width:0;flex:1}
+.batch-title{font-size:13px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px}
+.batch-meta{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.45}
+.batch-count-badge{flex-shrink:0;background:var(--g50);color:var(--g700);border:1px solid var(--g100);border-radius:20px;padding:3px 8px;font-size:9.5px;font-weight:700}
+.batch-items{display:flex;flex-direction:column;margin-top:4px}
+.batch-item{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(46,158,100,.12)}
+.batch-item:last-child{border-bottom:none}
+.batch-item-icon{width:32px;height:32px;border-radius:10px;background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:18px}
+.batch-item-name{font-size:11.5px;font-weight:700;color:var(--text);line-height:1.25}
+.batch-item-detail{font-size:9.5px;color:var(--muted);margin-top:2px}
+.batch-item-price{font-size:10px;font-weight:700;color:#9a6700;white-space:nowrap}
+.batch-item-actions{display:flex;gap:3px;margin-top:4px}
+.batch-mini-btn{border:none;border-radius:8px;padding:4px 7px;font-family:'Kanit',sans-serif;font-size:9px;cursor:pointer}
+.batch-mini-btn.edit{background:var(--s100);color:#0369a1}
+.batch-mini-btn.delete{background:#fef2f2;color:#dc2626}
+.batch-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.batch-sum-box{background:var(--g50);border-radius:9px;padding:7px 8px;min-width:0}
+.batch-sum-label{font-size:8.5px;color:var(--muted)}
+.batch-sum-value{font-size:12px;font-weight:800;color:var(--g700);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.batch-photos{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;padding-top:8px;border-top:1px dashed rgba(46,158,100,.14)}
+.batch-photo{width:58px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--border);cursor:pointer}
+.batch-id{font-size:8.5px;color:#9aa8a0;margin-top:4px;word-break:break-all}
+@media(max-width:360px){
+  .batch-summary{grid-template-columns:1fr 1fr}
+  .batch-summary .batch-sum-box:last-child{grid-column:1/-1}
+  .batch-item{grid-template-columns:30px minmax(0,1fr) auto}
+  .batch-photo{width:52px;height:52px}
+}
 
 </style>
 </head>
@@ -680,7 +715,11 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
         <div class="cart-add-row">
           <div class="cart-weight-wrap">
             <label>น้ำหนักรายการนี้ (กิโลกรัม) <span class="required-mark">*</span></label>
-            <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1" required onkeydown="if(event.key==='Enter'){event.preventDefault();addCurrentWasteToCart();}">
+            <input type="number" id="weightInput" placeholder="เช่น 5.5" min="0.01" step="0.1" required>
+          </div>
+          <div class="cart-price-wrap">
+            <label>ราคาขายรายการนี้ (บาท) <span class="required-mark">*</span></label>
+            <input type="number" id="salePriceInput" placeholder="เช่น 120" min="0.01" step="0.01" required onkeydown="if(event.key==='Enter'){event.preventDefault();addCurrentWasteToCart();}">
           </div>
           <button type="button" class="cart-add-btn" onclick="addCurrentWasteToCart()"><i class="ti ti-plus"></i> เพิ่มรายการ</button>
         </div>
@@ -700,15 +739,11 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwJeVoE3Dynm_i9AnO3JFMU
       </div>
       <div id="saleCartList" class="sale-cart-list"></div>
       <div class="sale-cart-summary" id="saleCartSummary"></div>
-      <div class="batch-note">เพิ่มได้หลายชนิดในครั้งเดียว เช่น กระดาษ → เหล็ก → ขวด PET แล้วค่อยกรอกข้อมูลการขายด้านล่างเพียงครั้งเดียว</div>
+      <div class="batch-note">แต่ละชนิดกรอก “น้ำหนัก + ราคาขาย” แยกกัน ระบบจะรวมยอดขายให้อัตโนมัติ ส่วนชื่อผู้บันทึก วันที่ และรูปถ่าย กรอกครั้งเดียว</div>
     </div>
 
     <div class="card" id="commonSaleCard">
       <div class="common-data-title"><i class="ti ti-clipboard-check" style="color:var(--g500);font-size:18px;"></i> ข้อมูลการขายครั้งนี้ <span style="font-size:10px;font-weight:500;color:var(--muted);">กรอกครั้งเดียว</span></div>
-      <div style="margin-bottom:12px;">
-        <label>มูลค่าการขายรวม (บาท) <span class="required-mark">*</span></label>
-        <input type="number" id="saleValueInput" placeholder="เช่น 350" min="0.01" step="0.01" required>
-      </div>
       <div style="margin-bottom:12px;">
         <label>ชื่อผู้บันทึก <span class="required-mark">*</span></label>
         <input type="text" id="recorderInput" required placeholder="เช่น ครูสมชาย">
@@ -899,6 +934,8 @@ const WASTE_TYPES = [
 ];
 let records=[], selectedWaste=null, currentSchool=null, uploadedPhotoUrls=[];
 let saleCart=[];
+let currentBatchId="";
+let editBatchId="";
 
 window.onload = function() {
   setupSchoolCodeInput();
@@ -912,7 +949,7 @@ window.onload = function() {
   document.getElementById('dateInput').value =
     today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
   document.getElementById('weightInput').addEventListener('input', updateCalc);
-  ['saleValueInput','recorderInput','dateInput'].forEach(id=>{
+  ['recorderInput','dateInput'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){ el.addEventListener('input', updateSubmitState); el.addEventListener('change', updateSubmitState); }
   });
@@ -1128,6 +1165,13 @@ async function loadFromServer() {
   } catch(e) { setSyncStatus('ไม่สามารถเชื่อมต่อได้','error'); }
 }
 
+function getOrCreateCurrentBatchId(){
+  if(currentBatchId) return currentBatchId;
+  const dateVal=(document.getElementById('dateInput')?.value || new Date().toISOString().slice(0,10));
+  currentBatchId='SALE-'+dateVal.replaceAll('-','')+'-'+Date.now().toString().slice(-6);
+  return currentBatchId;
+}
+
 // ── PHOTOS (multiple) ──
 async function handlePhotos(e) {
   const files = Array.from(e.target.files);
@@ -1168,7 +1212,7 @@ async function processAndUploadPhoto(file) {
         updateSubmitState();
 
         try {
-          const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, photo:base64, mimeType:'image/jpeg'});
+          const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, batch_id:getOrCreateCurrentBatchId(), sale_date:(document.getElementById('dateInput')?.value||''), photo:base64, mimeType:'image/jpeg'});
           if (res.success) {
             uploadedPhotoUrls[idx] = res.url;
             // เปลี่ยน overlay เป็นปุ่มลบ
@@ -1209,9 +1253,7 @@ function clearPhotos() {
 function getSaleSubmitState(){
   const missing=[];
   if(!saleCart.length) missing.push('รายการขยะ');
-  const saleRaw=(document.getElementById('saleValueInput')?.value||'').trim();
-  const sale=parseFloat(saleRaw);
-  if(saleRaw==='' || !Number.isFinite(sale) || sale<=0) missing.push('มูลค่าการขายรวม');
+  if(saleCart.some(x=>!Number.isFinite(Number(x.saleValue)) || Number(x.saleValue)<=0)) missing.push('ราคาขายแต่ละรายการ');
   const recorder=(document.getElementById('recorderInput')?.value||'').trim();
   if(!recorder) missing.push('ชื่อผู้บันทึก');
   const dateVal=document.getElementById('dateInput')?.value||'';
@@ -1241,8 +1283,6 @@ async function saveRecord() {
   const submitState=getSaleSubmitState();
   if(!submitState.ready){ updateSubmitState(); showToast('⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง'); return; }
   if (!saleCart.length) { showToast('⚠️ กรุณาเพิ่มขยะอย่างน้อย 1 รายการ'); return; }
-  const totalSale = parseFloat(document.getElementById('saleValueInput').value);
-  if (!totalSale||totalSale<=0) { showToast('⚠️ กรุณาใส่มูลค่าการขายรวม'); return; }
   const recorder = document.getElementById('recorderInput').value.trim();
   if (!recorder) { showToast('⚠️ กรุณาใส่ชื่อผู้บันทึก'); return; }
   const dateVal = document.getElementById('dateInput').value;
@@ -1252,30 +1292,22 @@ async function saveRecord() {
 
   const d = new Date(dateVal+'T00:00:00');
   const dateTh = d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
-  const totalWeight = saleCart.reduce((s,x)=>s+x.weight,0);
-  const batchId='SALE-'+dateVal.replaceAll('-','')+'-'+Date.now().toString().slice(-6);
+  const batchId=getOrCreateCurrentBatchId();
   const btn = document.getElementById('saveBtn');
   btn.disabled=true;
 
-  let saved=0, allocatedSale=0;
+  let saved=0;
   try {
     for (let i=0;i<saleCart.length;i++) {
       const item=saleCart[i];
       btn.innerHTML='<i class="ti ti-loader-2"></i> กำลังบันทึก '+(i+1)+'/'+saleCart.length;
       const gf=getGroupFactor(item.group);
       const co2=gf==null ? 0 : item.weight*gf;
-      // กระจายยอดขายรวมตามสัดส่วนน้ำหนัก เพื่อให้ Dashboard รวมยอดไม่ซ้ำ
-      let saleShare;
-      if(i===saleCart.length-1) saleShare=Math.max(0,totalSale-allocatedSale);
-      else {
-        saleShare=Math.round((totalSale*(item.weight/totalWeight))*100)/100;
-        allocatedSale+=saleShare;
-      }
       const res = await gasPost({
         action:'saveRecord', school_code:currentSchool.code,
         waste_type:item.id, waste_name:item.name, waste_group:item.group||'',
         weight_kg:item.weight, co2e_kg:co2, trees_equiv:co2/9.5,
-        sale_value:saleShare,
+        sale_value:item.saleValue,
         recorder:recorder,
         date_th_override:dateTh,
         photo_urls:validPhotos,
@@ -1288,10 +1320,10 @@ async function saveRecord() {
     showToast('✅ บันทึก '+saved+' รายการสำเร็จ!');
     saleCart=[];
     renderSaleCart();
-    document.getElementById('saleValueInput').value='';
     document.getElementById('recorderInput').value='';
     resetWasteSelection();
     clearPhotos();
+    currentBatchId="";
     await loadFromServer();
     showPage('dashboard', document.querySelectorAll('.nav-tab')[0]);
   } catch(e) {
@@ -1338,7 +1370,7 @@ function renderDashboard(filtered) {
   document.getElementById('statCO2').textContent=totalCO2.toFixed(2);
   document.getElementById('statTree').textContent=(totalCO2/9.5).toFixed(1);
   document.getElementById('statWeight').textContent=totalW.toFixed(2);
-  document.getElementById('statCount').textContent=filtered.length;
+  document.getElementById('statCount').textContent=groupRecordsByBatch(filtered).length;
 
   // กราฟรายเดือนพร้อมตัวเลข
   const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
@@ -1373,7 +1405,8 @@ function renderDashboard(filtered) {
   if (!filtered.length) {
     recent.innerHTML='<div class="empty-state"><div class="empty-icon">🌱</div><p>ไม่มีข้อมูลในช่วงที่เลือก</p></div>';
   } else {
-    recent.innerHTML=filtered.slice(0,4).map(r=>buildLogItem(r,false)).join('');
+    const recentBatches=groupRecordsByBatch(filtered).slice(0,4);
+    recent.innerHTML=recentBatches.map(g=>buildBatchCard(g,false)).join('');
   }
 }
 
@@ -1395,32 +1428,33 @@ function renderHistory(page) {
     return;
   }
 
-  const totalCO2 = filtered.reduce((s,r)=>s+(r.co2e_kg||0),0);
-  const totalW   = filtered.reduce((s,r)=>s+(r.weight_kg||0),0);
+  const batches = groupRecordsByBatch(filtered);
+  const totalCO2 = filtered.reduce((s,r)=>s+(parseFloat(r.co2e_kg)||0),0);
+  const totalW   = filtered.reduce((s,r)=>s+(parseFloat(r.weight_kg)||0),0);
   const totalSale = filtered.reduce((s,r)=>s+(parseFloat(r.sale_value)||0),0);
-  const totalPages = Math.ceil(filtered.length / HIST_PAGE_SIZE);
+  const totalPages = Math.ceil(batches.length / HIST_PAGE_SIZE);
   if (histCurrentPage > totalPages) histCurrentPage = totalPages;
+  if (histCurrentPage < 1) histCurrentPage = 1;
 
   const start = (histCurrentPage-1)*HIST_PAGE_SIZE;
-  const pageItems = filtered.slice(start, start+HIST_PAGE_SIZE);
+  const pageItems = batches.slice(start, start+HIST_PAGE_SIZE);
 
   summary.innerHTML = '<div class="summary-box">'+
-    '<span>รวม <b>'+filtered.length+'</b> รายการ</span>'+
+    '<span>การขาย <b>'+batches.length+'</b> ครั้ง</span>'+
+    '<span>ขยะ <b>'+filtered.length+'</b> รายการ</span>'+
     '<span>น้ำหนัก <b>'+totalW.toFixed(2)+' kg</b></span>'+
     '<span>CO₂e <b>'+totalCO2.toFixed(2)+' kg</b></span>'+
-    (totalSale>0 ? '<span>มูลค่า <b>฿'+totalSale.toLocaleString()+'</b></span>' : '')+
+    (totalSale>0 ? '<span>มูลค่า <b>฿'+totalSale.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2})+'</b></span>' : '')+
     '</div>';
 
-  list.innerHTML = pageItems.map(r=>buildLogItem(r,true)).join('');
+  list.innerHTML = pageItems.map(g=>buildBatchCard(g,true)).join('');
 
-  // Pagination buttons
+  // Pagination นับเป็น "ครั้งที่ขาย" ไม่ใช่จำนวนแถวขยะ
   if (totalPages <= 1) { pagination.innerHTML=''; return; }
   let pHtml = '';
-  // ปุ่ม ก่อนหน้า
   pHtml += '<button onclick="renderHistory('+(histCurrentPage-1)+')" '+(histCurrentPage===1?'disabled':'')+
     ' style="padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:'+(histCurrentPage===1?'var(--bg)':'#fff')+
     ';color:var(--muted);font-family:\'Kanit\',sans-serif;font-size:12px;cursor:'+(histCurrentPage===1?'default':'pointer')+';">‹</button>';
-  // เลขหน้า — แสดง max 5 หน้า
   const startP = Math.max(1, histCurrentPage-2);
   const endP   = Math.min(totalPages, startP+4);
   for (let p=startP; p<=endP; p++) {
@@ -1430,12 +1464,137 @@ function renderHistory(page) {
       ';color:'+(active?'#fff':'var(--text)')+
       ';font-family:\'Kanit\',sans-serif;font-size:12px;font-weight:'+(active?'700':'400')+';cursor:pointer;">'+p+'</button>';
   }
-  // ปุ่ม ถัดไป
   pHtml += '<button onclick="renderHistory('+(histCurrentPage+1)+')" '+(histCurrentPage===totalPages?'disabled':'')+
     ' style="padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:'+(histCurrentPage===totalPages?'var(--bg)':'#fff')+
     ';color:var(--muted);font-family:\'Kanit\',sans-serif;font-size:12px;cursor:'+(histCurrentPage===totalPages?'default':'pointer')+';">›</button>';
   pHtml += '<span style="font-size:11px;color:var(--muted);">หน้า '+histCurrentPage+'/'+totalPages+'</span>';
   pagination.innerHTML = pHtml;
+}
+
+function groupRecordsByBatch(list) {
+  const groups = [];
+  const map = new Map();
+
+  (list||[]).forEach((r, idx) => {
+    const rawBatch = (r.batch_id == null ? '' : String(r.batch_id)).trim();
+    const rowUrls = (Array.isArray(r.photo_urls) && r.photo_urls.length)
+      ? r.photo_urls.filter(Boolean)
+      : (r.photo_url ? [r.photo_url] : []);
+    // ข้อมูลใหม่: จับด้วย batch_id โดยตรง
+    // ข้อมูลเก่าก่อนมี batch_id: ถ้ามีรูปชุดเดียวกัน + วันเดียวกัน + ผู้บันทึกเดียวกัน
+    // ให้ถือเป็นการขายครั้งเดียวกัน เพื่อให้ข้อมูลทดสอบเดิมรวมการ์ดได้ด้วย
+    const legacyPhotoKey = rowUrls.length
+      ? 'P:'+(r.date_th||'')+'|'+(r.recorder||'')+'|'+rowUrls.slice().sort().join('|')
+      : '';
+    const key = rawBatch ? 'B:'+rawBatch
+      : (legacyPhotoKey || 'L:'+(r.row_index || idx)+'|'+(r.timestamp||''));
+    let g = map.get(key);
+    if (!g) {
+      g = {
+        key,
+        batchId: rawBatch,
+        items: [],
+        recorder: r.recorder || '',
+        date_th: r.date_th || '',
+        timestamp: r.timestamp || '',
+        photoUrls: []
+      };
+      map.set(key, g);
+      groups.push(g);
+    }
+    g.items.push(r);
+    if (!g.recorder && r.recorder) g.recorder = r.recorder;
+    if (!g.date_th && r.date_th) g.date_th = r.date_th;
+    if (!g.timestamp && r.timestamp) g.timestamp = r.timestamp;
+
+    const urls = (Array.isArray(r.photo_urls) && r.photo_urls.length)
+      ? r.photo_urls
+      : (r.photo_url ? [r.photo_url] : []);
+    urls.filter(Boolean).forEach(u => {
+      if (!g.photoUrls.includes(u)) g.photoUrls.push(u);
+    });
+  });
+  return groups;
+}
+
+function formatBatchDate(g) {
+  let s = g.date_th || '';
+  if (s && !s.includes('T')) return s;
+  const raw = g.timestamp || s;
+  if (!raw) return '-';
+  try {
+    return new Date(raw).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  } catch(e) { return s || '-'; }
+}
+
+function safeHtml(s) {
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function buildBatchCard(g, showActions) {
+  const items = g.items || [];
+  const totalW = items.reduce((s,r)=>s+(parseFloat(r.weight_kg)||0),0);
+  const totalCO2 = items.reduce((s,r)=>s+(parseFloat(r.co2e_kg)||0),0);
+  const totalSale = items.reduce((s,r)=>s+(parseFloat(r.sale_value)||0),0);
+  const dateStr = formatBatchDate(g);
+  const recorder = g.recorder || items.find(x=>x.recorder)?.recorder || '-';
+
+  const itemHtml = items.map(r => {
+    const wt = WASTE_TYPES.find(t=>t.id===r.waste_type)
+            || WASTE_TYPES.find(t=>t.name===r.waste_name)
+            || WASTE_TYPES.find(t=>r.waste_name && r.waste_name.includes(t.name.split('/')[0]));
+    const icon = wt ? wt.icon : getIconByName(r.waste_name||r.waste_type);
+    const price = parseFloat(r.sale_value)||0;
+    const rowIndex = parseInt(r.row_index)||0;
+    const itemName = r.waste_name||r.waste_type||'รายการขยะ';
+    const safeNameJs = String(itemName).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const actions = showActions && rowIndex
+      ? '<div class="batch-item-actions">'+
+          '<button class="batch-mini-btn edit" onclick="openEditModal('+rowIndex+')"><i class="ti ti-edit"></i> แก้ไข</button>'+
+          '<button class="batch-mini-btn delete" onclick="confirmDelete('+rowIndex+',\''+safeNameJs+'\')"><i class="ti ti-trash"></i> ลบ</button>'+
+        '</div>'
+      : '';
+    return '<div class="batch-item">'+
+      '<div class="batch-item-icon">'+icon+'</div>'+
+      '<div>'+
+        '<div class="batch-item-name">'+safeHtml(itemName)+'</div>'+
+        '<div class="batch-item-detail">'+safeHtml(r.waste_group||'')+' · '+(parseFloat(r.weight_kg)||0).toFixed(2)+' kg</div>'+
+        actions+
+      '</div>'+
+      '<div class="batch-item-price">฿'+price.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2})+'</div>'+
+    '</div>';
+  }).join('');
+
+  const photoHtml = (g.photoUrls||[]).length
+    ? '<div class="batch-photos">'+g.photoUrls.map(u=>{
+        const imgUrl=getDriveImgUrl(u);
+        return imgUrl ? '<img class="batch-photo" src="'+safeHtml(imgUrl)+'" onclick="openLightbox(this.src)" loading="lazy">' : '';
+      }).join('')+'</div>'
+    : '';
+
+  const batchIdHtml = g.batchId
+    ? '<div class="batch-id">Batch: '+safeHtml(g.batchId)+'</div>'
+    : '<div class="batch-id">ข้อมูลเดิม — จัดกลุ่มจากรูป/วันที่/ผู้บันทึก</div>';
+
+  return '<div class="batch-card">'+
+    '<div class="batch-head">'+
+      '<div class="batch-head-main">'+
+        '<div class="batch-title">🧾 การขาย '+safeHtml(dateStr)+'</div>'+
+        '<div class="batch-meta">👤 '+safeHtml(recorder)+' · 📷 '+(g.photoUrls||[]).length+' รูป</div>'+
+        (showActions ? batchIdHtml : '')+
+      '</div>'+
+      '<div class="batch-count-badge">'+items.length+' รายการ</div>'+
+    '</div>'+
+    '<div class="batch-items">'+itemHtml+'</div>'+
+    '<div class="batch-summary">'+
+      '<div class="batch-sum-box"><div class="batch-sum-label">น้ำหนักรวม</div><div class="batch-sum-value">'+totalW.toFixed(2)+' kg</div></div>'+
+      '<div class="batch-sum-box"><div class="batch-sum-label">มูลค่ารวม</div><div class="batch-sum-value">฿'+totalSale.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2})+'</div></div>'+
+      '<div class="batch-sum-box"><div class="batch-sum-label">GHG ลดได้รวม</div><div class="batch-sum-value">'+totalCO2.toFixed(2)+' kgCO₂e</div></div>'+
+    '</div>'+
+    photoHtml+
+  '</div>';
 }
 
 function getIconByName(name) {
@@ -1496,6 +1655,7 @@ let editPhotoUrls = []; // เก็บ URLs รูปปัจจุบัน�
 function openEditModal(rowIndex) {
   const r = records.find(x=>String(x.row_index)===String(rowIndex));
   if (!r) return;
+  editBatchId = r.batch_id || '';
   document.getElementById('editRowIndex').value = rowIndex;
   document.getElementById('editWasteType').value = r.waste_type||'paper_mix';
   document.getElementById('editWeight').value = parseFloat(r.weight_kg)||'';
@@ -1567,7 +1727,7 @@ async function editAddPhotos(e) {
           canvas.getContext('2d').drawImage(img,0,0,w,h);
           const base64=canvas.toDataURL('image/jpeg',0.75);
           try {
-            const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, photo:base64, mimeType:'image/jpeg'});
+            const res = await gasPost({action:'uploadPhoto', school_code:currentSchool.code, batch_id:(editBatchId||('EDIT-'+Date.now().toString().slice(-6))), sale_date:(document.getElementById('editDate')?.value||''), photo:base64, mimeType:'image/jpeg'});
             if (res.success) { editPhotoUrls.push(res.url); renderEditPhotos(); }
             else showToast('⚠️ อัปโหลดรูปไม่สำเร็จ');
           } catch(err) { showToast('⚠️ อัปโหลดรูปไม่สำเร็จ'); }
@@ -1622,6 +1782,7 @@ async function saveEdit() {
       sale_value:saleValue,
       recorder:recorder,
       date_th_override:dateTh,
+      batch_id: editBatchId || '',
       photo_urls: validEditPhotos
     });
     if (res.success) {
@@ -2150,18 +2311,23 @@ function updateCalc() {
 function addCurrentWasteToCart(){
   if(!selectedWaste){showToast('⚠️ กรุณาเลือกประเภทขยะ');return;}
   const input=document.getElementById('weightInput');
+  const priceInput=document.getElementById('salePriceInput');
   const weight=parseFloat(input.value);
+  const saleValue=parseFloat(priceInput.value);
   if(!weight||weight<=0){showToast('⚠️ กรุณาใส่น้ำหนักรายการนี้');input.focus();return;}
+  if(!saleValue||saleValue<=0){showToast('⚠️ กรุณาใส่ราคาขายรายการนี้');priceInput.focus();return;}
   const existingIndex=saleCart.findIndex(x=>x.id===selectedWaste.id);
   if(existingIndex>=0){
     saleCart[existingIndex].weight+=weight;
-    showToast('➕ รวมน้ำหนักกับรายการเดิมแล้ว');
+    saleCart[existingIndex].saleValue=(Number(saleCart[existingIndex].saleValue)||0)+saleValue;
+    showToast('➕ รวมกับรายการเดิมแล้ว');
   }else{
-    saleCart.push({id:selectedWaste.id,name:selectedWaste.name,group:selectedWaste.group,icon:selectedWaste.icon,weight:weight});
+    saleCart.push({id:selectedWaste.id,name:selectedWaste.name,group:selectedWaste.group,icon:selectedWaste.icon,weight:weight,saleValue:saleValue});
     showToast('✅ เพิ่ม '+selectedWaste.name+' แล้ว');
   }
   renderSaleCart();
   input.value='';
+  priceInput.value='';
   document.getElementById('calcResult')?.classList.remove('show');
   // เก็บหมวดเดิมไว้ เพื่อเพิ่มรายการย่อยชนิดต่อไปได้เร็ว
   selectedWaste=null;
@@ -2183,15 +2349,17 @@ function renderSaleCart(){
     return '<div class="sale-cart-item">'+
       '<div class="sale-cart-icon">'+item.icon+'</div>'+
       '<div><div class="sale-cart-name">'+escapeHtml(item.name)+'</div>'+
-      '<div class="sale-cart-meta">'+escapeHtml(item.group)+' · <b>'+item.weight.toFixed(2)+' kg</b></div></div>'+
+      '<div class="sale-cart-meta">'+escapeHtml(item.group)+' · <b>'+item.weight.toFixed(2)+' kg</b> · 💰 <b>'+Number(item.saleValue||0).toFixed(2)+' บาท</b></div></div>'+
       '<div class="sale-cart-actions"><button type="button" class="sale-cart-action" title="แก้ไข" onclick="editCartItem('+i+')"><i class="ti ti-pencil"></i></button><button type="button" class="sale-cart-action danger" title="ลบ" onclick="removeCartItem('+i+')"><i class="ti ti-trash"></i></button></div>'+
       '</div>';
   }).join('');
   const totalWeight=saleCart.reduce((s,x)=>s+x.weight,0);
+  const totalSale=saleCart.reduce((s,x)=>s+(Number(x.saleValue)||0),0);
   let totalCo2=0, pending=0;
   saleCart.forEach(x=>{const gf=getGroupFactor(x.group);if(gf==null) pending++; else totalCo2+=x.weight*gf;});
   summary.innerHTML='<div class="sale-cart-stat"><div class="lbl">จำนวนรายการ</div><div class="val">'+saleCart.length+' รายการ</div></div>'+
     '<div class="sale-cart-stat"><div class="lbl">น้ำหนักรวม</div><div class="val">'+totalWeight.toFixed(2)+' kg</div></div>'+
+    '<div class="sale-cart-stat full"><div class="lbl">มูลค่าขายรวม</div><div class="val">'+totalSale.toFixed(2)+' บาท</div></div>'+
     '<div class="sale-cart-stat full"><div class="lbl">GHG ลดได้รวม</div><div class="val">'+totalCo2.toFixed(3)+' kgCO₂e</div>'+(pending?'<div style="font-size:9px;color:#8a5a00;margin-top:2px;">มี '+pending+' รายการที่ยังไม่มี Factor จึงไม่รวมในยอด GHG</div>':'')+'</div>';
   updateSubmitState();
 }
@@ -2210,6 +2378,7 @@ function editCartItem(index){
   const sel=document.getElementById('wasteSubtypeSelect'); if(sel) sel.value=item.id;
   selectWaste(item.id);
   document.getElementById('weightInput').value=item.weight;
+  document.getElementById('salePriceInput').value=Number(item.saleValue)||'';
   updateCalc();
   document.getElementById('weightInput').focus();
   showToast('✏️ แก้ไขแล้วกด “เพิ่มรายการ” อีกครั้ง');
